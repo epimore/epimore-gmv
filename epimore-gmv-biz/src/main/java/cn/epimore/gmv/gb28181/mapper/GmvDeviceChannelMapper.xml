@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.epimore.gmv.gb28181.mapper.GmvDeviceChannelMapper">
+
+    <resultMap id="BaseResultMap" type="cn.epimore.gmv.vo.GmvDeviceChannel">
+            <id property="deviceId" column="DEVICE_ID" jdbcType="VARCHAR"/>
+            <id property="channelId" column="CHANNEL_ID" jdbcType="VARCHAR"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
+            <result property="manufacturer" column="MANUFACTURER" jdbcType="VARCHAR"/>
+            <result property="model" column="MODEL" jdbcType="VARCHAR"/>
+            <result property="owner" column="OWNER" jdbcType="VARCHAR"/>
+            <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+            <result property="civilCode" column="CIVIL_CODE" jdbcType="VARCHAR"/>
+            <result property="address" column="ADDRESS" jdbcType="VARCHAR"/>
+            <result property="parental" column="PARENTAL" jdbcType="CHAR"/>
+            <result property="block" column="BLOCK" jdbcType="VARCHAR"/>
+            <result property="parentId" column="PARENT_ID" jdbcType="VARCHAR"/>
+            <result property="ipAddress" column="IP_ADDRESS" jdbcType="VARCHAR"/>
+            <result property="port" column="PORT" jdbcType="INTEGER"/>
+            <result property="password" column="PASSWORD" jdbcType="VARCHAR"/>
+            <result property="longitude" column="LONGITUDE" jdbcType="DECIMAL"/>
+            <result property="latitude" column="LATITUDE" jdbcType="DECIMAL"/>
+            <result property="ptzType" column="PTZ_TYPE" jdbcType="INTEGER"/>
+            <result property="supplyLightType" column="SUPPLY_LIGHT_TYPE" jdbcType="CHAR"/>
+            <result property="aliasName" column="ALIAS_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        DEVICE_ID,CHANNEL_ID,NAME,
+        MANUFACTURER,MODEL,OWNER,
+        STATUS,CIVIL_CODE,ADDRESS,
+        PARENTAL,BLOCK,PARENT_ID,
+        IP_ADDRESS,PORT,PASSWORD,
+        LONGITUDE,LATITUDE,PTZ_TYPE,
+        SUPPLY_LIGHT_TYPE,ALIAS_NAME
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="cn.epimore.gmv.vo.IdMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from GMV_DEVICE_CHANNEL
+        where  DEVICE_ID = #{deviceId,jdbcType=VARCHAR} AND CHANNEL_ID = #{channelId,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="cn.epimore.gmv.vo.IdMap">
+        delete from GMV_DEVICE_CHANNEL
+        where  DEVICE_ID = #{deviceId,jdbcType=VARCHAR} AND CHANNEL_ID = #{channelId,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert">
+        insert into GMV_DEVICE_CHANNEL
+        ( DEVICE_ID,CHANNEL_ID,NAME
+        ,MANUFACTURER,MODEL,OWNER
+        ,STATUS,CIVIL_CODE,ADDRESS
+        ,PARENTAL,BLOCK,PARENT_ID
+        ,IP_ADDRESS,PORT,PASSWORD
+        ,LONGITUDE,LATITUDE,PTZ_TYPE
+        ,SUPPLY_LIGHT_TYPE,ALIAS_NAME)
+        values (#{deviceId,jdbcType=VARCHAR},#{channelId,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR}
+        ,#{manufacturer,jdbcType=VARCHAR},#{model,jdbcType=VARCHAR},#{owner,jdbcType=VARCHAR}
+        ,#{status,jdbcType=VARCHAR},#{civilCode,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR}
+        ,#{parental,jdbcType=CHAR},#{block,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR}
+        ,#{ipAddress,jdbcType=VARCHAR},#{port,jdbcType=INTEGER},#{password,jdbcType=VARCHAR}
+        ,#{longitude,jdbcType=DECIMAL},#{latitude,jdbcType=DECIMAL},#{ptzType,jdbcType=INTEGER}
+        ,#{supplyLightType,jdbcType=CHAR},#{aliasName,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective">
+        insert into GMV_DEVICE_CHANNEL
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="deviceId != null">DEVICE_ID,</if>
+                <if test="channelId != null">CHANNEL_ID,</if>
+                <if test="name != null">NAME,</if>
+                <if test="manufacturer != null">MANUFACTURER,</if>
+                <if test="model != null">MODEL,</if>
+                <if test="owner != null">OWNER,</if>
+                <if test="status != null">STATUS,</if>
+                <if test="civilCode != null">CIVIL_CODE,</if>
+                <if test="address != null">ADDRESS,</if>
+                <if test="parental != null">PARENTAL,</if>
+                <if test="block != null">BLOCK,</if>
+                <if test="parentId != null">PARENT_ID,</if>
+                <if test="ipAddress != null">IP_ADDRESS,</if>
+                <if test="port != null">PORT,</if>
+                <if test="password != null">PASSWORD,</if>
+                <if test="longitude != null">LONGITUDE,</if>
+                <if test="latitude != null">LATITUDE,</if>
+                <if test="ptzType != null">PTZ_TYPE,</if>
+                <if test="supplyLightType != null">SUPPLY_LIGHT_TYPE,</if>
+                <if test="aliasName != null">ALIAS_NAME,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="deviceId != null">#{deviceId,jdbcType=VARCHAR},</if>
+                <if test="channelId != null">#{channelId,jdbcType=VARCHAR},</if>
+                <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+                <if test="manufacturer != null">#{manufacturer,jdbcType=VARCHAR},</if>
+                <if test="model != null">#{model,jdbcType=VARCHAR},</if>
+                <if test="owner != null">#{owner,jdbcType=VARCHAR},</if>
+                <if test="status != null">#{status,jdbcType=VARCHAR},</if>
+                <if test="civilCode != null">#{civilCode,jdbcType=VARCHAR},</if>
+                <if test="address != null">#{address,jdbcType=VARCHAR},</if>
+                <if test="parental != null">#{parental,jdbcType=CHAR},</if>
+                <if test="block != null">#{block,jdbcType=VARCHAR},</if>
+                <if test="parentId != null">#{parentId,jdbcType=VARCHAR},</if>
+                <if test="ipAddress != null">#{ipAddress,jdbcType=VARCHAR},</if>
+                <if test="port != null">#{port,jdbcType=INTEGER},</if>
+                <if test="password != null">#{password,jdbcType=VARCHAR},</if>
+                <if test="longitude != null">#{longitude,jdbcType=DECIMAL},</if>
+                <if test="latitude != null">#{latitude,jdbcType=DECIMAL},</if>
+                <if test="ptzType != null">#{ptzType,jdbcType=INTEGER},</if>
+                <if test="supplyLightType != null">#{supplyLightType,jdbcType=CHAR},</if>
+                <if test="aliasName != null">#{aliasName,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.epimore.gmv.vo.GmvDeviceChannel">
+        update GMV_DEVICE_CHANNEL
+        <set>
+                <if test="name != null">
+                    NAME = #{name,jdbcType=VARCHAR},
+                </if>
+                <if test="manufacturer != null">
+                    MANUFACTURER = #{manufacturer,jdbcType=VARCHAR},
+                </if>
+                <if test="model != null">
+                    MODEL = #{model,jdbcType=VARCHAR},
+                </if>
+                <if test="owner != null">
+                    OWNER = #{owner,jdbcType=VARCHAR},
+                </if>
+                <if test="status != null">
+                    STATUS = #{status,jdbcType=VARCHAR},
+                </if>
+                <if test="civilCode != null">
+                    CIVIL_CODE = #{civilCode,jdbcType=VARCHAR},
+                </if>
+                <if test="address != null">
+                    ADDRESS = #{address,jdbcType=VARCHAR},
+                </if>
+                <if test="parental != null">
+                    PARENTAL = #{parental,jdbcType=CHAR},
+                </if>
+                <if test="block != null">
+                    BLOCK = #{block,jdbcType=VARCHAR},
+                </if>
+                <if test="parentId != null">
+                    PARENT_ID = #{parentId,jdbcType=VARCHAR},
+                </if>
+                <if test="ipAddress != null">
+                    IP_ADDRESS = #{ipAddress,jdbcType=VARCHAR},
+                </if>
+                <if test="port != null">
+                    PORT = #{port,jdbcType=INTEGER},
+                </if>
+                <if test="password != null">
+                    PASSWORD = #{password,jdbcType=VARCHAR},
+                </if>
+                <if test="longitude != null">
+                    LONGITUDE = #{longitude,jdbcType=DECIMAL},
+                </if>
+                <if test="latitude != null">
+                    LATITUDE = #{latitude,jdbcType=DECIMAL},
+                </if>
+                <if test="ptzType != null">
+                    PTZ_TYPE = #{ptzType,jdbcType=INTEGER},
+                </if>
+                <if test="supplyLightType != null">
+                    SUPPLY_LIGHT_TYPE = #{supplyLightType,jdbcType=CHAR},
+                </if>
+                <if test="aliasName != null">
+                    ALIAS_NAME = #{aliasName,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   DEVICE_ID = #{deviceId,jdbcType=VARCHAR} AND CHANNEL_ID = #{channelId,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.epimore.gmv.vo.GmvDeviceChannel">
+        update GMV_DEVICE_CHANNEL
+        set 
+            NAME =  #{name,jdbcType=VARCHAR},
+            MANUFACTURER =  #{manufacturer,jdbcType=VARCHAR},
+            MODEL =  #{model,jdbcType=VARCHAR},
+            OWNER =  #{owner,jdbcType=VARCHAR},
+            STATUS =  #{status,jdbcType=VARCHAR},
+            CIVIL_CODE =  #{civilCode,jdbcType=VARCHAR},
+            ADDRESS =  #{address,jdbcType=VARCHAR},
+            PARENTAL =  #{parental,jdbcType=CHAR},
+            BLOCK =  #{block,jdbcType=VARCHAR},
+            PARENT_ID =  #{parentId,jdbcType=VARCHAR},
+            IP_ADDRESS =  #{ipAddress,jdbcType=VARCHAR},
+            PORT =  #{port,jdbcType=INTEGER},
+            PASSWORD =  #{password,jdbcType=VARCHAR},
+            LONGITUDE =  #{longitude,jdbcType=DECIMAL},
+            LATITUDE =  #{latitude,jdbcType=DECIMAL},
+            PTZ_TYPE =  #{ptzType,jdbcType=INTEGER},
+            SUPPLY_LIGHT_TYPE =  #{supplyLightType,jdbcType=CHAR},
+            ALIAS_NAME =  #{aliasName,jdbcType=VARCHAR}
+        where   DEVICE_ID = #{deviceId,jdbcType=VARCHAR} AND CHANNEL_ID = #{channelId,jdbcType=VARCHAR} 
+    </update>
+</mapper>

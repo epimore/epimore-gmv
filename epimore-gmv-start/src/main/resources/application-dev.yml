@@ -1,4 +1,10 @@
 spring:
+  cloud:
+    loadbalancer:
+      retry:
+        max-retries-on-same-service-instance: 0
+  main:
+    allow-circular-references: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -92,3 +98,17 @@ pagehelper:
   offset-as-page-num: true
   row-bounds-with-count: true
 
+
+gmv:
+  api:
+    host: https://epimore.cn
+    #    host: http://172.18.38.186:18567
+    playLive: /session/api/play/live/stream
+    playBack: /session/api/play/back/stream
+    playBackSeek: /session/api/play/back/seek
+    playBackSpeed: /session/api/play/back/speed
+    ptz: /session/api/control/ptz
+    download: /session/api/download/mp4
+    teardown: /session/api/download/stop
+    downing: /session/api/downing/info
+    rmFile: /session/api/rm/file

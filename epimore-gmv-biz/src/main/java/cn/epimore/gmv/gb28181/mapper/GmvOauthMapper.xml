@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.epimore.gmv.gb28181.mapper.GmvOauthMapper">
+
+    <resultMap id="BaseResultMap" type="cn.epimore.gmv.vo.GmvOauth">
+            <id property="deviceId" column="DEVICE_ID" jdbcType="VARCHAR"/>
+            <result property="domainId" column="DOMAIN_ID" jdbcType="VARCHAR"/>
+            <result property="domain" column="DOMAIN" jdbcType="VARCHAR"/>
+            <result property="pwd" column="PWD" jdbcType="VARCHAR"/>
+            <result property="pwdCheck" column="PWD_CHECK" jdbcType="CHAR"/>
+            <result property="alias" column="ALIAS" jdbcType="VARCHAR"/>
+            <result property="status" column="STATUS" jdbcType="CHAR"/>
+            <result property="heartbeatSec" column="HEARTBEAT_SEC" jdbcType="INTEGER"/>
+            <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        DEVICE_ID,DOMAIN_ID,DOMAIN,
+        PWD,PWD_CHECK,ALIAS,
+        STATUS,HEARTBEAT_SEC,CREATE_TIME
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from GMV_OAUTH
+        where  DEVICE_ID = #{deviceId,jdbcType=VARCHAR} 
+    </select>
+    <select id="getGmvOauthList" resultType="cn.epimore.gmv.vo.GmvOauth">
+        select
+        <include refid="Base_Column_List"/>
+        from GMV_OAUTH
+        WHERE DEL = 0
+            <if test="deviceId != null">
+                and DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+            </if>
+            <if test="domainId != null">
+                and DOMAIN_ID = #{domainId,jdbcType=VARCHAR}
+            </if>
+            <if test="domain != null">
+                and DOMAIN = #{domain,jdbcType=VARCHAR}
+            </if>
+            <if test="pwd != null">
+                and PWD = #{pwd,jdbcType=VARCHAR}
+            </if>
+            <if test="pwdCheck != null">
+                and PWD_CHECK = #{pwdCheck,jdbcType=CHAR}
+            </if>
+            <if test="alias != null and alias != ''">
+                and ALIAS LIKE CONCAT('%',#{alias,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="status != null">
+                and STATUS = #{status,jdbcType=CHAR}
+            </if>
+            <if test="heartbeatSec != null">
+                and HEARTBEAT_SEC = #{heartbeatSec,jdbcType=INTEGER}
+            </if>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        update GMV_OAUTH
+        set STATUS = 0,
+            DEL    = 1
+        where DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvOauth" useGeneratedKeys="true">
+        insert into GMV_OAUTH
+        ( DEVICE_ID, DOMAIN_ID, DOMAIN
+        , PWD, PWD_CHECK, ALIAS
+        , STATUS, HEARTBEAT_SEC, CREATE_TIME)
+        values ( #{deviceId,jdbcType=VARCHAR}, #{domainId,jdbcType=VARCHAR}, #{domain,jdbcType=VARCHAR}
+               , #{pwd,jdbcType=VARCHAR}, #{pwdCheck,jdbcType=CHAR}, #{alias,jdbcType=VARCHAR}
+               , #{status,jdbcType=CHAR}, #{heartbeatSec,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvOauth" useGeneratedKeys="true">
+        insert into GMV_OAUTH
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="deviceId != null">DEVICE_ID,</if>
+                <if test="domainId != null">DOMAIN_ID,</if>
+                <if test="domain != null">DOMAIN,</if>
+                <if test="pwd != null">PWD,</if>
+                <if test="pwdCheck != null">PWD_CHECK,</if>
+                <if test="alias != null">ALIAS,</if>
+                <if test="status != null">STATUS,</if>
+                <if test="heartbeatSec != null">HEARTBEAT_SEC,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="deviceId != null">#{deviceId,jdbcType=VARCHAR},</if>
+                <if test="domainId != null">#{domainId,jdbcType=VARCHAR},</if>
+                <if test="domain != null">#{domain,jdbcType=VARCHAR},</if>
+                <if test="pwd != null">#{pwd,jdbcType=VARCHAR},</if>
+                <if test="pwdCheck != null">#{pwdCheck,jdbcType=CHAR},</if>
+                <if test="alias != null">#{alias,jdbcType=VARCHAR},</if>
+                <if test="status != null">#{status,jdbcType=CHAR},</if>
+                <if test="heartbeatSec != null">#{heartbeatSec,jdbcType=INTEGER},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.epimore.gmv.vo.GmvOauth">
+        update GMV_OAUTH
+        <set>
+                <if test="domainId != null">
+                    DOMAIN_ID = #{domainId,jdbcType=VARCHAR},
+                </if>
+                <if test="domain != null">
+                    DOMAIN = #{domain,jdbcType=VARCHAR},
+                </if>
+                <if test="pwd != null">
+                    PWD = #{pwd,jdbcType=VARCHAR},
+                </if>
+                <if test="pwdCheck != null">
+                    PWD_CHECK = #{pwdCheck,jdbcType=CHAR},
+                </if>
+                <if test="alias != null">
+                    ALIAS = #{alias,jdbcType=VARCHAR},
+                </if>
+                <if test="status != null">
+                    STATUS = #{status,jdbcType=CHAR},
+                </if>
+                <if test="heartbeatSec != null">
+                    HEARTBEAT_SEC = #{heartbeatSec,jdbcType=INTEGER},
+                </if>
+        </set>
+        where   DEVICE_ID = #{deviceId,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.epimore.gmv.vo.GmvOauth">
+        update GMV_OAUTH
+        set 
+            DOMAIN_ID =  #{domainId,jdbcType=VARCHAR},
+            DOMAIN =  #{domain,jdbcType=VARCHAR},
+            PWD =  #{pwd,jdbcType=VARCHAR},
+            PWD_CHECK =  #{pwdCheck,jdbcType=CHAR},
+            ALIAS =  #{alias,jdbcType=VARCHAR},
+            STATUS =  #{status,jdbcType=CHAR},
+            HEARTBEAT_SEC =  #{heartbeatSec,jdbcType=INTEGER}
+        where   DEVICE_ID = #{deviceId,jdbcType=VARCHAR} 
+    </update>
+</mapper>

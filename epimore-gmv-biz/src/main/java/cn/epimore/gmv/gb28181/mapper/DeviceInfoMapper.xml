@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.epimore.gmv.gb28181.mapper.DeviceInfoMapper">
+
+
+    <resultMap id="DeviceBaseResultMap" type="cn.epimore.gmv.vo.GmvDeviceInfo">
+        <id property="deviceId" column="DEVICE_ID" jdbcType="VARCHAR"/>
+        <id property="alias" column="alias" jdbcType="VARCHAR"/>
+        <result property="transport" column="TRANSPORT" jdbcType="VARCHAR"/>
+        <result property="registerExpires" column="REGISTER_EXPIRES" jdbcType="INTEGER"/>
+        <result property="registerTime" column="REGISTER_TIME" jdbcType="BIGINT"/>
+        <result property="localAddr" column="LOCAL_ADDR" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="DEVICE_TYPE" jdbcType="VARCHAR"/>
+        <result property="manufacturer" column="MANUFACTURER" jdbcType="VARCHAR"/>
+        <result property="model" column="MODEL" jdbcType="VARCHAR"/>
+        <result property="firmware" column="FIRMWARE" jdbcType="VARCHAR"/>
+        <result property="maxCamera" column="MAX_CAMERA" jdbcType="INTEGER"/>
+        <result property="status" column="STATUS" jdbcType="INTEGER"/>
+        <result property="gbVersion" column="GB_VERSION" jdbcType="VARCHAR"/>
+        <result property="cameraInCount" column="cameraInCount" jdbcType="INTEGER"/>
+        <result property="cameraOffCount" column="cameraOffCount" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="getGmvDeviceInfoList" resultMap="DeviceBaseResultMap">
+        SELECT d.DEVICE_ID,
+        o.ALIAS,
+        TRANSPORT,
+        REGISTER_EXPIRES,
+        REGISTER_TIME,
+        DEVICE_TYPE,
+        d.MANUFACTURER,
+        d.MODEL,
+        FIRMWARE,
+        MAX_CAMERA,
+        IF(d.`status` = 1 AND DATE_ADD(d.register_time,INTERVAL d.register_expires SECOND)>NOW(), 1, 0) AS `STATUS`,
+        GB_VERSION,
+        sum(if(c.PARENT_ID=c.DEVICE_ID,0,1)) AS cameraInCount,
+        IF
+        (
+        d.`status` = 0
+        OR NOW()>DATE_ADD( d.register_time, INTERVAL d.register_expires SECOND ),
+        COUNT(c.channel_id),
+        SUM( c.`status` = 'OFF' OR c.`status` = 'OFFLINE' )) AS cameraOffCount
+        FROM GMV_DEVICE d
+        INNER JOIN GMV_OAUTH o ON d.DEVICE_ID = o.DEVICE_ID
+        LEFT JOIN GMV_DEVICE_CHANNEL c ON d.DEVICE_ID = c.DEVICE_ID
+        where o.DEL = 0
+        <if test="alias != null and alias != ''">
+            and o.ALIAS LIKE CONCAT('%',#{alias,jdbcType=VARCHAR},'%')
+        </if>
+        GROUP BY d.DEVICE_ID, o.CREATE_TIME
+        ORDER BY o.CREATE_TIME DESC, d.DEVICE_ID
+    </select>
+
+    <resultMap id="ChannelBaseResultMap" type="cn.epimore.gmv.vo.GmvDeviceChannel">
+        <id property="deviceId" column="DEVICE_ID" jdbcType="VARCHAR"/>
+        <id property="channelId" column="CHANNEL_ID" jdbcType="VARCHAR"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="manufacturer" column="MANUFACTURER" jdbcType="VARCHAR"/>
+        <result property="model" column="MODEL" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="civilCode" column="CIVIL_CODE" jdbcType="VARCHAR"/>
+        <result property="address" column="ADDRESS" jdbcType="VARCHAR"/>
+        <result property="parental" column="PARENTAL" jdbcType="CHAR"/>
+        <result property="block" column="BLOCK" jdbcType="VARCHAR"/>
+        <result property="parentId" column="PARENT_ID" jdbcType="VARCHAR"/>
+        <result property="ipAddress" column="IP_ADDRESS" jdbcType="VARCHAR"/>
+        <result property="port" column="PORT" jdbcType="INTEGER"/>
+        <result property="password" column="PASSWORD" jdbcType="VARCHAR"/>
+        <result property="longitude" column="LONGITUDE" jdbcType="DECIMAL"/>
+        <result property="latitude" column="LATITUDE" jdbcType="DECIMAL"/>
+        <result property="ptzType" column="PTZ_TYPE" jdbcType="INTEGER"/>
+        <result property="supplyLightType" column="SUPPLY_LIGHT_TYPE" jdbcType="CHAR"/>
+        <result property="aliasName" column="ALIAS_NAME" jdbcType="VARCHAR"/>
+        <result property="picUrl" column="picUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getGmvDeviceChannelList" resultMap="ChannelBaseResultMap">
+        SELECT d.DEVICE_ID,
+               c.CHANNEL_ID,
+               c.NAME,
+               c.MANUFACTURER,
+               c.MODEL,
+               IF(d.`status` = 1
+                      AND DATE_ADD(d.register_time, INTERVAL d.register_expires SECOND) > NOW()
+                      AND (c.`status` = 'ON' OR c.`status` = 'ONLINE' OR c.`status` = ''),
+                  "ON", "OFF")                                          `STATUS`,
+               c.CIVIL_CODE,
+               c.ADDRESS,
+               c.PARENTAL,
+               c.BLOCK,
+               c.PARENT_ID,
+               c.IP_ADDRESS,
+               c.PORT,
+               c.PASSWORD,
+               c.LONGITUDE,
+               c.LATITUDE,
+               c.PTZ_TYPE,
+               c.SUPPLY_LIGHT_TYPE,
+               c.ALIAS_NAME,
+               CONCAT(a.DIR_PATH, "/", a.FILE_NAME, ".", a.FILE_FORMAT) picUrl
+        FROM GMV_DEVICE d
+                 INNER JOIN GMV_DEVICE_CHANNEL c
+                            ON d.DEVICE_ID = c.DEVICE_ID
+                 LEFT JOIN GMV_FILE_INFO a
+                           ON a.ID = (SELECT MAX(ID)
+                                      FROM GMV_FILE_INFO
+                                      WHERE FILE_TYPE = 0
+                                        AND IS_DEL = 0
+                                        and DEVICE_ID = c.DEVICE_ID
+                                        AND CHANNEL_ID = c.CHANNEL_ID)
+        where d.DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+          AND c.PARENT_ID = c.DEVICE_ID
+        order by c.CHANNEL_ID
+    </select>
+    <select id="getImageInfo" resultType="cn.epimore.gmv.vo.ImageInfo">
+        SELECT a.ID id,
+        a.BIZ_ID bizId,
+        a.NOTE note,
+        CONCAT(a.DIR_PATH, "/", a.FILE_NAME, ".", a.FILE_FORMAT) picUrl,
+        a.FILE_SIZE picSize,
+        a.BIZ_TIME bizTime
+        FROM GMV_FILE_INFO a
+        WHERE a.DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+        AND a.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
+        AND a.IS_DEL = 0
+        AND a.FILE_TYPE = 0
+        <if test="startTime != null">
+            AND a.BIZ_TIME &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            AND a.BIZ_TIME &lt; #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        ORDER BY a.ID ASC
+    </select>
+    <select id="getRecordVideoInfos" resultType="cn.epimore.gmv.vo.RecordVideoInfo">
+        SELECT b.ID                                                     fileId,
+               a.DEVICE_ID                                              deviceId,
+               a.CHANNEL_ID                                             channelId,
+               a.BIZ_ID                                                 bizId,
+               a.CT                                                     createTime,
+               a.ST                                                     startTime,
+               a.ET                                                     endTime,
+               b.FILE_NAME                                              fileName,
+               CONCAT(
+                       IF(
+                               b.DIR_PATH IS NULL OR b.DIR_PATH = '.',
+                               '',
+                               IF(
+                                       LEFT(b.DIR_PATH, 2) = './',
+                                       SUBSTRING(b.DIR_PATH, 2),
+                                       b.DIR_PATH
+                               )
+                       ),
+                       '/',
+                       b.FILE_NAME,
+                       '.',
+                       b.FILE_FORMAT
+               ) AS videoUrl,
+               a.STATE                                                  state,
+               b.FILE_SIZE                                              size,
+               a.STREAM_APP_NAME                                        nodeName,
+               b.BIZ_TIME                                               bizTime
+        FROM GMV_RECORD a
+                 LEFT JOIN GMV_FILE_INFO b ON a.BIZ_ID = b.BIZ_ID
+            AND b.IS_DEL = 0
+            AND b.FILE_TYPE = 1
+        WHERE a.DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+          AND a.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
+        ORDER BY a.CT DESC
+    </select>
+    <select id="getRecordingCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM GMV_RECORD
+        WHERE STATE = 0
+          and DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+          AND CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
+    </select>
+    <select id="getFilePath" resultType="java.lang.String">
+        SELECT
+            CONCAT( b.ABS_PATH, "/", b.FILE_NAME, ".", b.FILE_FORMAT ) videoUrl
+        FROM
+            GMV_FILE_INFO b
+        WHERE
+            b.IS_DEL = 0
+          AND b.FILE_TYPE = 1
+          AND b.ID = #{fileId}
+    </select>
+
+</mapper>

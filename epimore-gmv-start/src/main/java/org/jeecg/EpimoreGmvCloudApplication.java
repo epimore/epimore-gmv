@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringBootApplication
 @ComponentScan(basePackages={"cn.epimore.gmv","org.jeecg"})
-@MapperScan({"cn.epimore.gmv.mapper","org.jeecg.**.mapper"})
+@MapperScan({"cn.epimore.gmv.**.mapper","org.jeecg.**.mapper"})
 @EnableFeignClients(basePackages ={"cn.epimore.gmv","org.jeecg"} )
 public class EpimoreGmvCloudApplication implements CommandLineRunner {
     @Autowired

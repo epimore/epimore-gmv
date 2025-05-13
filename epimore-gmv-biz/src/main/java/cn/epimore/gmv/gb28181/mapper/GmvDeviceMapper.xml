@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.epimore.gmv.gb28181.mapper.GmvDeviceMapper">
+
+    <resultMap id="BaseResultMap" type="cn.epimore.gmv.vo.GmvDevice">
+            <id property="deviceId" column="DEVICE_ID" jdbcType="VARCHAR"/>
+            <result property="transport" column="TRANSPORT" jdbcType="VARCHAR"/>
+            <result property="registerExpires" column="REGISTER_EXPIRES" jdbcType="INTEGER"/>
+            <result property="registerTime" column="REGISTER_TIME" jdbcType="BIGINT"/>
+            <result property="localAddr" column="LOCAL_ADDR" jdbcType="VARCHAR"/>
+            <result property="sipFrom" column="SIP_FROM" jdbcType="VARCHAR"/>
+            <result property="sipTo" column="SIP_TO" jdbcType="VARCHAR"/>
+            <result property="deviceType" column="DEVICE_TYPE" jdbcType="VARCHAR"/>
+            <result property="manufacturer" column="MANUFACTURER" jdbcType="VARCHAR"/>
+            <result property="model" column="MODEL" jdbcType="VARCHAR"/>
+            <result property="firmware" column="FIRMWARE" jdbcType="VARCHAR"/>
+            <result property="maxCamera" column="MAX_CAMERA" jdbcType="INTEGER"/>
+            <result property="status" column="STATUS" jdbcType="INTEGER"/>
+            <result property="gbVersion" column="GB_VERSION" jdbcType="VARCHAR"/>
+            <result property="lastUpdateTime" column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        DEVICE_ID,TRANSPORT,REGISTER_EXPIRES,
+        REGISTER_TIME,LOCAL_ADDR,SIP_FROM,
+        SIP_TO,DEVICE_TYPE,MANUFACTURER,
+        MODEL,FIRMWARE,MAX_CAMERA,
+        STATUS,GB_VERSION,LAST_UPDATE_TIME
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from GMV_DEVICE
+        where  DEVICE_ID = #{deviceId,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE GMV_DEVICE
+        FROM
+            GMV_DEVICE
+                LEFT JOIN GMV_DEVICE_CHANNEL c ON c.DEVICE_ID = GMV_DEVICE.DEVICE_ID
+        WHERE
+            c.DEVICE_ID IS NULL
+          AND GMV_DEVICE.DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvDevice" useGeneratedKeys="true">
+        insert into GMV_DEVICE
+        ( DEVICE_ID,TRANSPORT,REGISTER_EXPIRES
+        ,REGISTER_TIME,LOCAL_ADDR,SIP_FROM
+        ,SIP_TO,DEVICE_TYPE,MANUFACTURER
+        ,MODEL,FIRMWARE,MAX_CAMERA
+        ,STATUS,GB_VERSION,LAST_UPDATE_TIME
+        )
+        values (#{deviceId,jdbcType=VARCHAR},#{transport,jdbcType=VARCHAR},#{registerExpires,jdbcType=INTEGER}
+        ,#{registerTime,jdbcType=BIGINT},#{localAddr,jdbcType=VARCHAR},#{sipFrom,jdbcType=VARCHAR}
+        ,#{sipTo,jdbcType=VARCHAR},#{deviceType,jdbcType=VARCHAR},#{manufacturer,jdbcType=VARCHAR}
+        ,#{model,jdbcType=VARCHAR},#{firmware,jdbcType=VARCHAR},#{maxCamera,jdbcType=INTEGER}
+        ,#{status,jdbcType=INTEGER},#{gbVersion,jdbcType=VARCHAR},#{lastUpdateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvDevice" useGeneratedKeys="true">
+        insert into GMV_DEVICE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="deviceId != null">DEVICE_ID,</if>
+                <if test="transport != null">TRANSPORT,</if>
+                <if test="registerExpires != null">REGISTER_EXPIRES,</if>
+                <if test="registerTime != null">REGISTER_TIME,</if>
+                <if test="localAddr != null">LOCAL_ADDR,</if>
+                <if test="sipFrom != null">SIP_FROM,</if>
+                <if test="sipTo != null">SIP_TO,</if>
+                <if test="deviceType != null">DEVICE_TYPE,</if>
+                <if test="manufacturer != null">MANUFACTURER,</if>
+                <if test="model != null">MODEL,</if>
+                <if test="firmware != null">FIRMWARE,</if>
+                <if test="maxCamera != null">MAX_CAMERA,</if>
+                <if test="status != null">STATUS,</if>
+                <if test="gbVersion != null">GB_VERSION,</if>
+                <if test="lastUpdateTime != null">LAST_UPDATE_TIME,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="deviceId != null">#{deviceId,jdbcType=VARCHAR},</if>
+                <if test="transport != null">#{transport,jdbcType=VARCHAR},</if>
+                <if test="registerExpires != null">#{registerExpires,jdbcType=INTEGER},</if>
+                <if test="registerTime != null">#{registerTime,jdbcType=BIGINT},</if>
+                <if test="localAddr != null">#{localAddr,jdbcType=VARCHAR},</if>
+                <if test="sipFrom != null">#{sipFrom,jdbcType=VARCHAR},</if>
+                <if test="sipTo != null">#{sipTo,jdbcType=VARCHAR},</if>
+                <if test="deviceType != null">#{deviceType,jdbcType=VARCHAR},</if>
+                <if test="manufacturer != null">#{manufacturer,jdbcType=VARCHAR},</if>
+                <if test="model != null">#{model,jdbcType=VARCHAR},</if>
+                <if test="firmware != null">#{firmware,jdbcType=VARCHAR},</if>
+                <if test="maxCamera != null">#{maxCamera,jdbcType=INTEGER},</if>
+                <if test="status != null">#{status,jdbcType=INTEGER},</if>
+                <if test="gbVersion != null">#{gbVersion,jdbcType=VARCHAR},</if>
+                <if test="lastUpdateTime != null">#{lastUpdateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.epimore.gmv.vo.GmvDevice">
+        update GMV_DEVICE
+        <set>
+                <if test="transport != null">
+                    TRANSPORT = #{transport,jdbcType=VARCHAR},
+                </if>
+                <if test="registerExpires != null">
+                    REGISTER_EXPIRES = #{registerExpires,jdbcType=INTEGER},
+                </if>
+                <if test="registerTime != null">
+                    REGISTER_TIME = #{registerTime,jdbcType=BIGINT},
+                </if>
+                <if test="localAddr != null">
+                    LOCAL_ADDR = #{localAddr,jdbcType=VARCHAR},
+                </if>
+                <if test="sipFrom != null">
+                    SIP_FROM = #{sipFrom,jdbcType=VARCHAR},
+                </if>
+                <if test="sipTo != null">
+                    SIP_TO = #{sipTo,jdbcType=VARCHAR},
+                </if>
+                <if test="deviceType != null">
+                    DEVICE_TYPE = #{deviceType,jdbcType=VARCHAR},
+                </if>
+                <if test="manufacturer != null">
+                    MANUFACTURER = #{manufacturer,jdbcType=VARCHAR},
+                </if>
+                <if test="model != null">
+                    MODEL = #{model,jdbcType=VARCHAR},
+                </if>
+                <if test="firmware != null">
+                    FIRMWARE = #{firmware,jdbcType=VARCHAR},
+                </if>
+                <if test="maxCamera != null">
+                    MAX_CAMERA = #{maxCamera,jdbcType=INTEGER},
+                </if>
+                <if test="status != null">
+                    STATUS = #{status,jdbcType=INTEGER},
+                </if>
+                <if test="gbVersion != null">
+                    GB_VERSION = #{gbVersion,jdbcType=VARCHAR},
+                </if>
+                <if test="lastUpdateTime != null">
+                    LAST_UPDATE_TIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   DEVICE_ID = #{deviceId,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.epimore.gmv.vo.GmvDevice">
+        update GMV_DEVICE
+        set 
+            TRANSPORT =  #{transport,jdbcType=VARCHAR},
+            REGISTER_EXPIRES =  #{registerExpires,jdbcType=INTEGER},
+            REGISTER_TIME =  #{registerTime,jdbcType=BIGINT},
+            LOCAL_ADDR =  #{localAddr,jdbcType=VARCHAR},
+            SIP_FROM =  #{sipFrom,jdbcType=VARCHAR},
+            SIP_TO =  #{sipTo,jdbcType=VARCHAR},
+            DEVICE_TYPE =  #{deviceType,jdbcType=VARCHAR},
+            MANUFACTURER =  #{manufacturer,jdbcType=VARCHAR},
+            MODEL =  #{model,jdbcType=VARCHAR},
+            FIRMWARE =  #{firmware,jdbcType=VARCHAR},
+            MAX_CAMERA =  #{maxCamera,jdbcType=INTEGER},
+            STATUS =  #{status,jdbcType=INTEGER},
+            GB_VERSION =  #{gbVersion,jdbcType=VARCHAR},
+            LAST_UPDATE_TIME =  #{lastUpdateTime,jdbcType=TIMESTAMP}
+        where   DEVICE_ID = #{deviceId,jdbcType=VARCHAR} 
+    </update>
+</mapper>
