@@ -1,0 +1,94 @@
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  jpa:
+    open-in-view: false
+  aop:
+    proxy-target-class: true
+  mvc:
+    static-path-pattern: /**
+    #Spring Boot 2.6+后映射匹配的默认策略已从AntPathMatcher更改为PathPatternParser,需要手动指定为ant-path-matcher
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true
+        loginUsername: admin
+        loginPassword: 123456
+        allow:
+      web-stat-filter:
+        enabled: true
+    dynamic:
+      druid: # 全局druid参数，绝大部分值和默认保持一致。(现已支持的参数如下,不清楚含义不要乱设置)
+        # 连接池的配置信息
+        # 初始化大小，最小，最大
+        initial-size: 5
+        min-idle: 5
+        maxActive: 1000
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        # 打开PSCache，并且指定每个连接上PSCache的大小
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+        filters: stat,wall,slf4j
+        # 打开mergeSql功能；慢SQL记录
+        stat:
+          merge-sql: true
+          slow-sql-millis: 5000
+      datasource:
+        master:
+          url: jdbc:mysql://imysql:33061/gmv?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+          username: epimore
+          password: Kz986542.
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          # 多数据源配置
+          #multi-datasource1:
+          #url: jdbc:mysql://localhost:3306/jeecg-boot2?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+          #username: root
+          #password: root
+          #driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    database: 0
+    host: jeecg-boot-redis
+    password: Gmv.1.0.by.202504
+    port: 13679
+jeecg:
+  shiro:
+    excludeUrls: /redisKey/**,/aa/bb
+
+logging:
+  config: classpath:logback.xml
+  level:
+    cn.epimore.gmv: debug
+##swagger
+knife4j:
+  #开启增强配置
+  enable: true
+  #开启生产环境屏蔽
+  production: false
+  basic:
+    enable: false
+    username: jeecg
+    password: jeecg1314
+  scan-package: cn.epimore.gmv
+
+#接口配置信息
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  offset-as-page-num: true
+  row-bounds-with-count: true
+

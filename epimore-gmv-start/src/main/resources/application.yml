@@ -1,0 +1,26 @@
+server:
+  port: 38888
+spring:
+  application:
+    name: epimore-gmv
+  profiles:
+    active: 'dev'
+#  config:
+#    import:
+#      - optional:nacos:jeecg.yaml
+#      - optional:nacos:@profile.name@.yaml
+  cloud:
+    nacos:
+      config:
+        server-addr: @config.server-addr@
+        group: @config.group@
+        namespace: @config.namespace@
+        username: @config.username@
+        password: @config.password@
+      discovery:
+        server-addr: ${spring.cloud.nacos.config.server-addr}
+        namespace: @config.namespace@
+        username: @config.username@
+        password: @config.password@
+        group: @config.group@
+
