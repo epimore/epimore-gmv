@@ -20,9 +20,10 @@ public class GmvHttpUtil {
         try {
             OkHttpClient client = new OkHttpClient().newBuilder().readTimeout(16, TimeUnit.SECONDS).build();
             RequestBody body = RequestBody.create(JSON_TYPE, JSON.toJSONString(obj));
-            String u_id = CurrentUserHelper.getSystemUser().getId();
+//            String u_id = CurrentUserHelper.getSystemUser().getId();
+            String token = RequestContextHolderUtil.getToken();
             Request request = new Request.Builder()
-                    .addHeader("gmv-token", u_id)
+                    .addHeader("gmv-token", token)
                     .url(url)
                     .post(body)
                     .build();
