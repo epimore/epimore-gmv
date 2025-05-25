@@ -24,9 +24,9 @@ public class SseController {
     @Autowired
     private SseApi sseApi;
 
-    @PostMapping(value = "/connect",produces = {MediaType.TEXT_EVENT_STREAM_VALUE})
+    @PostMapping(value = "/connect", produces = {MediaType.TEXT_EVENT_STREAM_VALUE})
     @ApiOperation(value = "connect", notes = "建立连接")
-    @CrossOrigin(origins = {"http://localhost:3100", "http://127.0.0.1:1573"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"https://epimore.cn", "http://localhost:3100", "http://127.0.0.1:1573"}, allowCredentials = "true")
     public SseEmitter connect() {
         try {
             String username = CurrentUserHelper.getSystemUser().getUsername();

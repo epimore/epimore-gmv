@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration scan="true" scanPeriod="60 seconds">
-	<property name="log_dir" value="/mnt/epimore/logs/gmv"/>
+	<property name="log_dir" value="/mnt/gmv/biz/logs"/>
 
 	<!--设置日志输出为控制台-->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">

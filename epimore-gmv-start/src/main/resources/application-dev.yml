@@ -101,7 +101,7 @@ pagehelper:
 
 gmv:
   api:
-    host: https://epimore.cn
+    host: http://127.0.0.1:18567
     #    host: http://172.18.38.186:18567
     playLive: /session/api/play/live/stream
     playBack: /session/api/play/back/stream

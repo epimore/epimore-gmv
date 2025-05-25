@@ -145,7 +145,7 @@ public class DcOptController {
         }
     }
 
-    @PostMapping("/download/file")
+    @GetMapping("/download/file")
     @ApiOperation(value = "/download/file", notes = "下载文件")
     public ResponseEntity<Resource> downloadFile(@RequestParam("fileId") Long fileId) {
         logger.info("downloadFile:{}", fileId);
