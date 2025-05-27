@@ -3,6 +3,8 @@ package cn.epimore.gmv.gb28181.service.impl;
 import cn.epimore.gmv.gb28181.mapper.GmvOauthMapper;
 import cn.epimore.gmv.gb28181.service.api.GmvOauthApi;
 import cn.epimore.gmv.vo.GmvOauth;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,7 +33,9 @@ public class GmvOauthApiImpl implements GmvOauthApi {
     }
 
     @Override
-    public List<GmvOauth> getGmvOauthList(GmvOauth record) {
-        return gmvOauthMapper.getGmvOauthList(record);
+    public PageInfo<GmvOauth> getGmvOauthList(GmvOauth record) {
+        PageHelper.startPage(record.getPageNum(), record.getPageSize());
+        List<GmvOauth> list = gmvOauthMapper.getGmvOauthList(record);
+        return new PageInfo<>(list);
     }
 }

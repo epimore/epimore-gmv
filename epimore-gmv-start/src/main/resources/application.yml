@@ -2,13 +2,10 @@ server:
   port: 38888
 spring:
   application:
-    name: epimore-gmv
+    name: epimore-gmv-local
   profiles:
     active: 'dev'
-#  config:
-#    import:
-#      - optional:nacos:jeecg.yaml
-#      - optional:nacos:@profile.name@.yaml
+
   cloud:
     nacos:
       config:
@@ -24,3 +21,7 @@ spring:
         password: @config.password@
         group: @config.group@
 
+  config:
+    import:
+      - optional:nacos:jeecg.yaml
+#      - optional:nacos:@profile.name@.yaml

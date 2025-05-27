@@ -54,7 +54,7 @@ spring:
           slow-sql-millis: 5000
       datasource:
         master:
-          url: jdbc:mysql://imysql:33061/gmv?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+          url: jdbc:mysql://jeecg-boot-mysql:33061/gmv?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
           username: epimore
           password: Kz986542.
           driver-class-name: com.mysql.cj.jdbc.Driver
@@ -71,7 +71,7 @@ spring:
     port: 13679
 jeecg:
   shiro:
-    excludeUrls: /redisKey/**,/aa/bb
+    excludeUrls: /v2/api-docs,/swagger-resources/**,/doc.html,/webjars/**,/swagger-ui.html
 
 logging:
   config: classpath:logback.xml
@@ -87,7 +87,6 @@ knife4j:
     enable: false
     username: jeecg
     password: jeecg1314
-  scan-package: cn.epimore.gmv
 
 #接口配置信息
 pagehelper:

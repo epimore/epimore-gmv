@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @TableName GMV_OAUTH
  */
 @ApiModel(value = "GmvOauth", description = "认证表")
-public class GmvOauth implements Serializable {
+public class GmvOauth extends BasePage implements Serializable {
     /**
      * 中心8行业2类型3网络1序号6
      */

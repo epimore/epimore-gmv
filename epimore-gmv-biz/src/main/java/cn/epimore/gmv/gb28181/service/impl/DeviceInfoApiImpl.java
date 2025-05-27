@@ -19,8 +19,10 @@ public class DeviceInfoApiImpl implements DeviceInfoApi {
     private DeviceInfoMapper deviceInfoMapper;
 
     @Override
-    public List<GmvDeviceInfo> getGmvDeviceInfoList(GmvDeviceInfo info) {
-        return deviceInfoMapper.getGmvDeviceInfoList(info);
+    public PageInfo<GmvDeviceInfo> getGmvDeviceInfoList(GmvDeviceInfo info) {
+        PageHelper.startPage(info.getPageNum(), info.getPageSize());
+        List<GmvDeviceInfo> list = deviceInfoMapper.getGmvDeviceInfoList(info);
+        return new PageInfo<>(list);
     }
 
     @Override

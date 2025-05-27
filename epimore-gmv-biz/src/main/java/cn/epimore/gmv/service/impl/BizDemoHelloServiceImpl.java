@@ -6,7 +6,7 @@ import cn.epimore.gmv.service.IBizDemoHelloService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-import org.jeecg.common.system.api.IAuthAPI;
+//import org.jeecg.common.system.api.IAuthAPI;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.RedisUtil;
 
@@ -24,8 +24,8 @@ import java.util.Map;
 public class BizDemoHelloServiceImpl implements IBizDemoHelloService {
     @Autowired
     DemoHelloMapper demoHelloMapper;
-    @Autowired
-    IAuthAPI authAPI;
+//    @Autowired
+//    IAuthAPI authAPI;
 //    @Autowired
 //    ISysBaseAPI sysBaseAPI;
 
@@ -47,7 +47,7 @@ public class BizDemoHelloServiceImpl implements IBizDemoHelloService {
 
     @Override
     public String testLogin(String username, String password) {
-        String result = this.authAPI.loginUser(username,password,true);
+//        String result = this.authAPI.loginUser(username,password,true);
         return "登录失败:" ;
     }
 

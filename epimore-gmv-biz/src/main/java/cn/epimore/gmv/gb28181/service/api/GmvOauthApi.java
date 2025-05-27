@@ -1,6 +1,7 @@
 package cn.epimore.gmv.gb28181.service.api;
 
 import cn.epimore.gmv.vo.GmvOauth;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ public interface GmvOauthApi {
 
     int updateByPrimaryKeySelective(GmvOauth record);
 
-    List<GmvOauth> getGmvOauthList(GmvOauth record);
+    PageInfo<GmvOauth> getGmvOauthList(GmvOauth record);
 }

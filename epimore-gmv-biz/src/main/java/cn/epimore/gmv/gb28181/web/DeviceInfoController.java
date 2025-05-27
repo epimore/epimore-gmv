@@ -34,11 +34,11 @@ public class DeviceInfoController {
 
     @PostMapping("/devices")
     @ApiOperation(value = "devices", notes = "查询设备列表")
-    public ResponseEntity<List<GmvDeviceInfo>> getGmvDeviceInfoList(@RequestBody @NotNull GmvDeviceInfo info) {
+    public ResponseEntity<PageInfo<GmvDeviceInfo>> getGmvDeviceInfoList(@RequestBody @NotNull GmvDeviceInfo info) {
         logger.info("getGmvDeviceInfoList;{}", JSON.toJSONString(info));
         try {
-            List<GmvDeviceInfo> list = deviceInfoApi.getGmvDeviceInfoList(info);
-            return Result.success(list);
+            PageInfo<GmvDeviceInfo> infos = deviceInfoApi.getGmvDeviceInfoList(info);
+            return Result.success(infos);
         } catch (Exception e) {
             logger.error("getGmvDeviceInfoList异常", e);
             return Result.failure("查询设备列表失败.");

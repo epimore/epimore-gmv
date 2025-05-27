@@ -9,7 +9,7 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface DeviceInfoApi {
-    List<GmvDeviceInfo> getGmvDeviceInfoList(GmvDeviceInfo info);
+    PageInfo<GmvDeviceInfo> getGmvDeviceInfoList(GmvDeviceInfo info);
     List<GmvDeviceChannel> getGmvDeviceChannelList(String deviceId);
     PageInfo<ImageInfo> getImageInfo(ImageQuery query);
 }

@@ -6,73 +6,73 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class GmvDeviceInfo implements Serializable {
+public class GmvDeviceInfo extends BasePage implements Serializable {
 
     /**
-    * 设备主键ID
-    */
+     * 设备主键ID
+     */
     @ApiModelProperty("设备主键ID")
     private String deviceId;
     @ApiModelProperty("别名")
     private String alias;
     /**
-    * 网络协议：TCP/UDP
-    */
+     * 网络协议：TCP/UDP
+     */
     @ApiModelProperty("网络协议：TCP/UDP")
     private String transport;
     /**
-    * 注册有效期
-    */
+     * 注册有效期
+     */
     @ApiModelProperty("注册有效期")
     private Integer registerExpires;
     /**
-    * 最近注册时间
-    */
+     * 最近注册时间
+     */
     @ApiModelProperty("最近注册时间")
     private LocalDateTime registerTime;
     /**
-    * 设备本地地址
-    */
+     * 设备本地地址
+     */
     @ApiModelProperty("设备本地地址")
     private String localAddr;
     /**
-    * 设备类型IPC/NVR/DVR...
-    */
+     * 设备类型IPC/NVR/DVR...
+     */
     @ApiModelProperty("设备类型IPC/NVR/DVR...")
     private String deviceType;
     /**
-    * 厂家名称
-    */
+     * 厂家名称
+     */
     @ApiModelProperty("厂家名称")
     private String manufacturer;
     /**
-    * 设备型号
-    */
+     * 设备型号
+     */
     @ApiModelProperty("设备型号")
     private String model;
     /**
-    * 固件版本
-    */
+     * 固件版本
+     */
     @ApiModelProperty("固件版本")
     private String firmware;
     /**
-    * 最大相机数
-    */
+     * 最大相机数
+     */
     @ApiModelProperty("最大相机数")
     private Integer maxCamera;
     /**
-    * 0-离线，1-在线
-    */
+     * 0-离线，1-在线
+     */
     @ApiModelProperty("0-离线，1-在线")
     private Integer status;
     /**
-    * 国标版本
-    */
+     * 国标版本
+     */
     @ApiModelProperty("国标版本")
     private String gbVersion;
     /**
-    * 最后更新时间
-    */
+     * 最后更新时间
+     */
     @ApiModelProperty("最后更新时间")
     private Date lastUpdateTime;
 

@@ -5,6 +5,7 @@ import cn.epimore.gmv.vo.GmvOauth;
 import cn.epimore.gmv.vo.IdMap;
 import cn.epimore.gmv.vo.Result;
 import com.alibaba.fastjson2.JSON;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -75,11 +76,11 @@ public class GmvEnrollsController {
 
     @PostMapping("/query")
     @ApiOperation(value = "query", notes = "查询设备")
-    public ResponseEntity<List<GmvOauth>> getGmvOauthList(@RequestBody @NotNull GmvOauth record) {
+    public ResponseEntity<PageInfo<GmvOauth>> getGmvOauthList(@RequestBody @NotNull GmvOauth record) {
         logger.info("getGmvOauthList:{}", JSON.toJSONString(record));
         try {
-            List<GmvOauth> list = gmvOauthApi.getGmvOauthList(record);
-            return Result.success(list);
+            PageInfo<GmvOauth> infos = gmvOauthApi.getGmvOauthList(record);
+            return Result.success(infos);
         } catch (Exception e) {
             logger.error("查询设备异常", e);
             return Result.failure("查询失败");
