@@ -28,7 +28,7 @@ public class SseApiImpl implements SseApi {
             SseEmitter emitter = getSseEmitter(uid);
             // 注册异常回调，调用 emitter.completeWithError() 触发
             emitter.onError(throwable -> {
-                logger.error("连接已异常，正准备关闭，uid = {}", uid, throwable);
+                logger.error("连接异常，关闭，uid = {},{}", uid, throwable.getMessage());
                 SSE_CACHE.remove(uid);
             });
 
@@ -37,7 +37,7 @@ public class SseApiImpl implements SseApi {
 
             return emitter;
         });
-        sendInitMsg(sseEmitter, uid);
+        scheduler.schedule(() -> sendInitMsg(sseEmitter, uid), 1, TimeUnit.SECONDS);
         return sseEmitter;
     }
 
@@ -103,7 +103,7 @@ public class SseApiImpl implements SseApi {
             emitter.send(SseEmitter.event().reconnectTime(1000L).data(JSON.toJSONString(map)));
         } catch (IOException e) {
             emitter.complete();
-            logger.error("发送初始化消息失败，uid = {}", uid, e);
+            logger.error("发送初始化消息失败，uid = {},{}", uid, e.getMessage());
         }
     }
 
@@ -113,7 +113,7 @@ public class SseApiImpl implements SseApi {
         } catch (Exception e) {
             emitter.complete();
             SSE_CACHE.remove(uid); // 直接移除失效的 emitter
-            logger.error("发送消息失败，uid = {}", uid, e);
+            logger.error("发送消息失败，uid = {},{}", uid, e.getMessage());
         }
     }
 
@@ -125,7 +125,7 @@ public class SseApiImpl implements SseApi {
                 map.put("data", "💓");
                 emitter.send(SseEmitter.event().reconnectTime(1000L).data(JSON.toJSONString(map)));
             } catch (IOException e) {
-                logger.error("心跳发送失败，uid = {}", uid, e);
+                logger.error("心跳发送失败，uid = {},{}", uid, e.getMessage());
                 emitter.complete();
                 SSE_CACHE.remove(uid);
             }

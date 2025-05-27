@@ -187,5 +187,10 @@
           AND b.FILE_TYPE = 1
           AND b.ID = #{fileId}
     </select>
+    <select id="getTenantIdByDeviceId" resultType="java.lang.Integer">
+        SELECT TENANT_ID
+        from GMV_DEVICE
+        where DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+    </select>
 
 </mapper>
