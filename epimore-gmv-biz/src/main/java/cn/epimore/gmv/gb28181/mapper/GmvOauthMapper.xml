@@ -68,11 +68,14 @@
     <insert id="insert" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvOauth" useGeneratedKeys="true">
         insert into GMV_OAUTH
         ( DEVICE_ID, DOMAIN_ID, DOMAIN
-        , PWD, PWD_CHECK, ALIAS
-        , STATUS, HEARTBEAT_SEC, CREATE_TIME)
+        , PWD, PWD_CHECK, ALIAS, DEL
+        , STATUS, HEARTBEAT_SEC, CREATE_TIME
+        , create_by, sys_org_code, tenant_id, update_by, update_time)
         values ( #{deviceId,jdbcType=VARCHAR}, #{domainId,jdbcType=VARCHAR}, #{domain,jdbcType=VARCHAR}
-               , #{pwd,jdbcType=VARCHAR}, #{pwdCheck,jdbcType=CHAR}, #{alias,jdbcType=VARCHAR}
-               , #{status,jdbcType=CHAR}, #{heartbeatSec,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+               , #{pwd,jdbcType=VARCHAR}, #{pwdCheck,jdbcType=CHAR}, #{alias,jdbcType=VARCHAR}, 0
+               , #{status,jdbcType=CHAR}, #{heartbeatSec,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+               , #{createBy,jdbcType=VARCHAR}, #{sysOrgCode,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR},
+                 #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvOauth" useGeneratedKeys="true">
         insert into GMV_OAUTH
@@ -100,29 +103,31 @@
     <update id="updateByPrimaryKeySelective" parameterType="cn.epimore.gmv.vo.GmvOauth">
         update GMV_OAUTH
         <set>
-                <if test="domainId != null">
-                    DOMAIN_ID = #{domainId,jdbcType=VARCHAR},
-                </if>
-                <if test="domain != null">
-                    DOMAIN = #{domain,jdbcType=VARCHAR},
-                </if>
-                <if test="pwd != null">
-                    PWD = #{pwd,jdbcType=VARCHAR},
-                </if>
-                <if test="pwdCheck != null">
-                    PWD_CHECK = #{pwdCheck,jdbcType=CHAR},
-                </if>
-                <if test="alias != null">
-                    ALIAS = #{alias,jdbcType=VARCHAR},
-                </if>
-                <if test="status != null">
-                    STATUS = #{status,jdbcType=CHAR},
-                </if>
-                <if test="heartbeatSec != null">
-                    HEARTBEAT_SEC = #{heartbeatSec,jdbcType=INTEGER},
-                </if>
+            update_by=#{updateBy,jdbcType=VARCHAR},
+            update_time=#{updateTime,jdbcType=TIMESTAMP},
+            <if test="domainId != null">
+                DOMAIN_ID = #{domainId,jdbcType=VARCHAR},
+            </if>
+            <if test="domain != null">
+                DOMAIN = #{domain,jdbcType=VARCHAR},
+            </if>
+            <if test="pwd != null">
+                PWD = #{pwd,jdbcType=VARCHAR},
+            </if>
+            <if test="pwdCheck != null">
+                PWD_CHECK = #{pwdCheck,jdbcType=CHAR},
+            </if>
+            <if test="alias != null">
+                ALIAS = #{alias,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=CHAR},
+            </if>
+            <if test="heartbeatSec != null">
+                HEARTBEAT_SEC = #{heartbeatSec,jdbcType=INTEGER},
+            </if>
         </set>
-        where   DEVICE_ID = #{deviceId,jdbcType=VARCHAR} 
+        where DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.epimore.gmv.vo.GmvOauth">
         update GMV_OAUTH

@@ -2,8 +2,11 @@ package cn.epimore.gmv.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -11,6 +14,8 @@ import java.util.Date;
  * @TableName GMV_DEVICE
  */
 @ApiModel(value = "GmvDevice", description = "设备主表")
+@Getter
+@Setter
 public class GmvDevice implements Serializable {
     /**
      * 设备主键ID
@@ -106,126 +111,19 @@ public class GmvDevice implements Serializable {
     /**
      * 最后更新时间
      */
-    @ApiModelProperty("最后更新时间")
+    @ApiModelProperty("设备注册最后更新时间")
     private Date lastUpdateTime;
 
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public String getTransport() {
-        return transport;
-    }
-
-    public void setTransport(String transport) {
-        this.transport = transport;
-    }
-
-    public Integer getRegisterExpires() {
-        return registerExpires;
-    }
-
-    public void setRegisterExpires(Integer registerExpires) {
-        this.registerExpires = registerExpires;
-    }
-
-    public Long getRegisterTime() {
-        return registerTime;
-    }
-
-    public void setRegisterTime(Long registerTime) {
-        this.registerTime = registerTime;
-    }
-
-    public String getLocalAddr() {
-        return localAddr;
-    }
-
-    public void setLocalAddr(String localAddr) {
-        this.localAddr = localAddr;
-    }
-
-    public String getSipFrom() {
-        return sipFrom;
-    }
-
-    public void setSipFrom(String sipFrom) {
-        this.sipFrom = sipFrom;
-    }
-
-    public String getSipTo() {
-        return sipTo;
-    }
-
-    public void setSipTo(String sipTo) {
-        this.sipTo = sipTo;
-    }
-
-    public String getDeviceType() {
-        return deviceType;
-    }
-
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getFirmware() {
-        return firmware;
-    }
-
-    public void setFirmware(String firmware) {
-        this.firmware = firmware;
-    }
-
-    public Integer getMaxCamera() {
-        return maxCamera;
-    }
-
-    public void setMaxCamera(Integer maxCamera) {
-        this.maxCamera = maxCamera;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getGbVersion() {
-        return gbVersion;
-    }
-
-    public void setGbVersion(String gbVersion) {
-        this.gbVersion = gbVersion;
-    }
-
-    public Date getLastUpdateTime() {
-        return lastUpdateTime;
-    }
-
-    public void setLastUpdateTime(Date lastUpdateTime) {
-        this.lastUpdateTime = lastUpdateTime;
-    }
+    @ApiModelProperty("创建时间")
+    private LocalDateTime createTime;
+    @ApiModelProperty("创建人")
+    private String createBy;
+    @ApiModelProperty("组织编码")
+    private String sysOrgCode;
+    @ApiModelProperty("租户ID")
+    private String tenantId;
+    @ApiModelProperty("更新人")
+    private String updateBy;
+    @ApiModelProperty("更新时间")
+    private LocalDateTime updateTime;
 }

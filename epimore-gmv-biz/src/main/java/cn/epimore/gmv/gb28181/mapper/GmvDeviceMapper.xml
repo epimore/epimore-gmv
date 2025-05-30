@@ -48,18 +48,19 @@
     </delete>
     <insert id="insert" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvDevice" useGeneratedKeys="true">
         insert into GMV_DEVICE
-        ( DEVICE_ID,TRANSPORT,REGISTER_EXPIRES
-        ,REGISTER_TIME,LOCAL_ADDR,SIP_FROM
-        ,SIP_TO,DEVICE_TYPE,MANUFACTURER
-        ,MODEL,FIRMWARE,MAX_CAMERA
-        ,STATUS,GB_VERSION,LAST_UPDATE_TIME
-        )
-        values (#{deviceId,jdbcType=VARCHAR},#{transport,jdbcType=VARCHAR},#{registerExpires,jdbcType=INTEGER}
-        ,#{registerTime,jdbcType=BIGINT},#{localAddr,jdbcType=VARCHAR},#{sipFrom,jdbcType=VARCHAR}
-        ,#{sipTo,jdbcType=VARCHAR},#{deviceType,jdbcType=VARCHAR},#{manufacturer,jdbcType=VARCHAR}
-        ,#{model,jdbcType=VARCHAR},#{firmware,jdbcType=VARCHAR},#{maxCamera,jdbcType=INTEGER}
-        ,#{status,jdbcType=INTEGER},#{gbVersion,jdbcType=VARCHAR},#{lastUpdateTime,jdbcType=TIMESTAMP}
-        )
+        ( DEVICE_ID, TRANSPORT, REGISTER_EXPIRES
+        , REGISTER_TIME, LOCAL_ADDR, SIP_FROM
+        , SIP_TO, DEVICE_TYPE, MANUFACTURER
+        , MODEL, FIRMWARE, MAX_CAMERA
+        , STATUS, GB_VERSION, LAST_UPDATE_TIME, CREATE_TIME
+        , create_by, sys_org_code, tenant_id, update_by, update_time)
+        values ( #{deviceId,jdbcType=VARCHAR}, #{transport,jdbcType=VARCHAR}, #{registerExpires,jdbcType=INTEGER}
+               , #{registerTime,jdbcType=BIGINT}, #{localAddr,jdbcType=VARCHAR}, #{sipFrom,jdbcType=VARCHAR}
+               , #{sipTo,jdbcType=VARCHAR}, #{deviceType,jdbcType=VARCHAR}, #{manufacturer,jdbcType=VARCHAR}
+               , #{model,jdbcType=VARCHAR}, #{firmware,jdbcType=VARCHAR}, #{maxCamera,jdbcType=INTEGER}
+               , #{status,jdbcType=INTEGER}, #{gbVersion,jdbcType=VARCHAR}, #{lastUpdateTime,jdbcType=TIMESTAMP}
+               , #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{sysOrgCode,jdbcType=VARCHAR},
+                 #{tenantId,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvDevice" useGeneratedKeys="true">
         insert into GMV_DEVICE

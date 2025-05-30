@@ -46,7 +46,7 @@
         FROM GMV_DEVICE d
         INNER JOIN GMV_OAUTH o ON d.DEVICE_ID = o.DEVICE_ID
         LEFT JOIN GMV_DEVICE_CHANNEL c ON d.DEVICE_ID = c.DEVICE_ID
-        where o.DEL = 0
+        where o.DEL = 0 and d.REGISTER_TIME IS NOT NULL
         <if test="alias != null and alias != ''">
             and o.ALIAS LIKE CONCAT('%',#{alias,jdbcType=VARCHAR},'%')
         </if>

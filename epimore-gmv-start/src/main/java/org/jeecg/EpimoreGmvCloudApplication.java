@@ -10,11 +10,13 @@ import org.jeecg.common.constant.GlobalConstants;
 import org.jeecg.common.base.BaseMap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @ComponentScan(basePackages={"cn.epimore.gmv","org.jeecg"})
 @MapperScan({"cn.epimore.gmv.**.mapper","org.jeecg.**.mapper"})
 @EnableFeignClients(basePackages ={"cn.epimore.gmv","org.jeecg"} )
+@EnableTransactionManagement
 public class EpimoreGmvCloudApplication implements CommandLineRunner {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

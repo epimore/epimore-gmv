@@ -1,20 +1,29 @@
 package cn.epimore.gmv.gb28181.service.impl;
 
+import cn.epimore.gmv.gb28181.mapper.GmvDeviceMapper;
 import cn.epimore.gmv.gb28181.mapper.GmvOauthMapper;
 import cn.epimore.gmv.gb28181.service.api.GmvOauthApi;
+import cn.epimore.gmv.gb28181.utils.CurrentUserHelper;
+import cn.epimore.gmv.vo.GmvDevice;
 import cn.epimore.gmv.vo.GmvOauth;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.jeecg.common.system.vo.LoginUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class GmvOauthApiImpl implements GmvOauthApi {
+    private final static Logger logger = LoggerFactory.getLogger(GmvOauthApiImpl.class);
     @Resource
     private GmvOauthMapper gmvOauthMapper;
+    @Resource
+    private GmvDeviceMapper gmvDeviceMapper;
 
     @Override
     public int deleteByPrimaryKey(String id) {
@@ -22,8 +31,14 @@ public class GmvOauthApiImpl implements GmvOauthApi {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insert(GmvOauth record) {
-        record.setCreateTime(LocalDateTime.now());
+//        record.setCreateTime(LocalDateTime.now());
+        LoginUser systemUser = CurrentUserHelper.getSystemUser();
+        logger.info("当前系统用户信息:{}", systemUser);
+        GmvDevice gmvDevice = new GmvDevice();
+        gmvDevice.setDeviceId(record.getDeviceId());
+        gmvDeviceMapper.insert(gmvDevice);
         return gmvOauthMapper.insert(record);
     }
 

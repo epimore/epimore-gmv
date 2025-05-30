@@ -2,6 +2,8 @@ package cn.epimore.gmv.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
  * @TableName GMV_OAUTH
  */
 @ApiModel(value = "GmvOauth", description = "认证表")
+@Getter
+@Setter
 public class GmvOauth extends BasePage implements Serializable {
     /**
      * 中心8行业2类型3网络1序号6
@@ -54,76 +58,15 @@ public class GmvOauth extends BasePage implements Serializable {
     private Integer heartbeatSec;
     @ApiModelProperty("创建时间")
     private LocalDateTime createTime;
+    @ApiModelProperty("创建人")
+    private String createBy;
+    @ApiModelProperty("组织编码")
+    private String sysOrgCode;
+    @ApiModelProperty("租户ID")
+    private String tenantId;
+    @ApiModelProperty("更新人")
+    private String updateBy;
+    @ApiModelProperty("更新时间")
+    private LocalDateTime updateTime;
 
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public String getDomainId() {
-        return domainId;
-    }
-
-    public void setDomainId(String domainId) {
-        this.domainId = domainId;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
-
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
-
-    public String getPwd() {
-        return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
-
-    public String getPwdCheck() {
-        return pwdCheck;
-    }
-
-    public void setPwdCheck(String pwdCheck) {
-        this.pwdCheck = pwdCheck;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Integer getHeartbeatSec() {
-        return heartbeatSec;
-    }
-
-    public void setHeartbeatSec(Integer heartbeatSec) {
-        this.heartbeatSec = heartbeatSec;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
 }

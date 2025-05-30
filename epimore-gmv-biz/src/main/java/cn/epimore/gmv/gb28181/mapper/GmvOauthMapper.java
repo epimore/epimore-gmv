@@ -16,13 +16,13 @@ public interface GmvOauthMapper {
 
     int insert(GmvOauth record);
 
-    int insertSelective(GmvOauth record);
+//    int insertSelective(GmvOauth record);
 
     GmvOauth selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(GmvOauth record);
 
-    int updateByPrimaryKey(GmvOauth record);
+//    int updateByPrimaryKey(GmvOauth record);
 
     List<GmvOauth> getGmvOauthList(GmvOauth record);
 
