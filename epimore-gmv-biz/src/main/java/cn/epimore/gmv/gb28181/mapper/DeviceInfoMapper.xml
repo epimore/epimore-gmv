@@ -111,7 +111,7 @@
                                         and DEVICE_ID = c.DEVICE_ID
                                         AND CHANNEL_ID = c.CHANNEL_ID)
         where d.DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
-          AND c.PARENT_ID = c.DEVICE_ID
+        and c.MODEL not like '%udio%'
         order by c.CHANNEL_ID
     </select>
     <select id="getImageInfo" resultType="cn.epimore.gmv.vo.ImageInfo">
