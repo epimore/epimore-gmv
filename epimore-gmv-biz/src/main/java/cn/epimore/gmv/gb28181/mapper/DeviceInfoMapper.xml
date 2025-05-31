@@ -84,7 +84,7 @@
                c.MODEL,
                IF(d.`status` = 1
                       AND DATE_ADD(d.register_time, INTERVAL d.register_expires SECOND) > NOW()
-                      AND (c.`status` = 'ON' OR c.`status` = 'ONLINE' OR c.`status` = ''),
+                      AND (c.`status` = 'ON' OR c.`status` = 'OK' OR c.`status` = 'ONLINE' OR c.`status` = ''),
                   "ON", "OFF")                                          `STATUS`,
                c.CIVIL_CODE,
                c.ADDRESS,
