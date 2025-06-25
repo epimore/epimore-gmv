@@ -1,0 +1,17 @@
+-- 序列号
+CREATE DEFINER=`root`@`%` FUNCTION `f_get_seq_code`(p_seq_name VARCHAR(64)) RETURNS varchar(128) CHARSET utf8mb4
+    MODIFIES SQL DATA
+    DETERMINISTIC
+BEGIN
+    UPDATE C_SEQ_CODE
+    SET current_value = @cur_val := current_value + increment_value
+    WHERE seq_name = p_seq_name;
+
+    RETURN CONCAT_WS('',
+        (SELECT prefix_code FROM C_SEQ_CODE WHERE seq_name = p_seq_name),
+        IFNULL(LPAD(@cur_val,
+                   (SELECT code_lenth FROM C_SEQ_CODE WHERE seq_name = p_seq_name),
+                   '0'),
+               @cur_val)
+    );
+END

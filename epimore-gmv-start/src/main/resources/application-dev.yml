@@ -99,6 +99,7 @@ pagehelper:
 
 
 gmv:
+  seqName: 34020000001117
   api:
     host: http://127.0.0.1:18567
     #    host: http://172.18.38.186:18567

@@ -8,6 +8,9 @@
             <id property="deviceId" column="DEVICE_ID" jdbcType="VARCHAR"/>
             <result property="domainId" column="DOMAIN_ID" jdbcType="VARCHAR"/>
             <result property="domain" column="DOMAIN" jdbcType="VARCHAR"/>
+            <result property="longitude" column="longitude" jdbcType="DECIMAL"/>
+            <result property="latitude" column="latitude" jdbcType="DECIMAL"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
             <result property="pwd" column="PWD" jdbcType="VARCHAR"/>
             <result property="pwdCheck" column="PWD_CHECK" jdbcType="CHAR"/>
             <result property="alias" column="ALIAS" jdbcType="VARCHAR"/>
@@ -17,7 +20,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        DEVICE_ID,DOMAIN_ID,DOMAIN,
+        DEVICE_ID,DOMAIN_ID,DOMAIN,longitude,latitude,address,
         PWD,PWD_CHECK,ALIAS,
         STATUS,HEARTBEAT_SEC,CREATE_TIME
     </sql>
@@ -57,6 +60,7 @@
             <if test="heartbeatSec != null">
                 and HEARTBEAT_SEC = #{heartbeatSec,jdbcType=INTEGER}
             </if>
+        ORDER BY CREATE_TIME DESC
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
@@ -67,11 +71,12 @@
     </delete>
     <insert id="insert" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvOauth" useGeneratedKeys="true">
         insert into GMV_OAUTH
-        ( DEVICE_ID, DOMAIN_ID, DOMAIN
+        ( DEVICE_ID, DOMAIN_ID, DOMAIN, longitude, latitude, address
         , PWD, PWD_CHECK, ALIAS, DEL
         , STATUS, HEARTBEAT_SEC, CREATE_TIME
         , create_by, sys_org_code, tenant_id, update_by, update_time)
         values ( #{deviceId,jdbcType=VARCHAR}, #{domainId,jdbcType=VARCHAR}, #{domain,jdbcType=VARCHAR}
+               , #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, #{address,jdbcType=VARCHAR}
                , #{pwd,jdbcType=VARCHAR}, #{pwdCheck,jdbcType=CHAR}, #{alias,jdbcType=VARCHAR}, 0
                , #{status,jdbcType=CHAR}, #{heartbeatSec,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
                , #{createBy,jdbcType=VARCHAR}, #{sysOrgCode,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR},
@@ -83,6 +88,9 @@
                 <if test="deviceId != null">DEVICE_ID,</if>
                 <if test="domainId != null">DOMAIN_ID,</if>
                 <if test="domain != null">DOMAIN,</if>
+                <if test="longitude != null">longitude,</if>
+                <if test="latitude != null">latitude,</if>
+                <if test="address != null">address,</if>
                 <if test="pwd != null">PWD,</if>
                 <if test="pwdCheck != null">PWD_CHECK,</if>
                 <if test="alias != null">ALIAS,</if>
@@ -93,6 +101,9 @@
                 <if test="deviceId != null">#{deviceId,jdbcType=VARCHAR},</if>
                 <if test="domainId != null">#{domainId,jdbcType=VARCHAR},</if>
                 <if test="domain != null">#{domain,jdbcType=VARCHAR},</if>
+                <if test="longitude != null">#{longitude,jdbcType=DECIMAL},</if>
+                <if test="latitude != null">#{latitude,jdbcType=DECIMAL},</if>
+                <if test="address != null">#{address,jdbcType=VARCHAR},</if>
                 <if test="pwd != null">#{pwd,jdbcType=VARCHAR},</if>
                 <if test="pwdCheck != null">#{pwdCheck,jdbcType=CHAR},</if>
                 <if test="alias != null">#{alias,jdbcType=VARCHAR},</if>
@@ -110,6 +121,15 @@
             </if>
             <if test="domain != null">
                 DOMAIN = #{domain,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude,jdbcType=DECIMAL},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude,jdbcType=DECIMAL},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
             </if>
             <if test="pwd != null">
                 PWD = #{pwd,jdbcType=VARCHAR},
@@ -134,6 +154,9 @@
         set 
             DOMAIN_ID =  #{domainId,jdbcType=VARCHAR},
             DOMAIN =  #{domain,jdbcType=VARCHAR},
+            longitude =  #{longitude,jdbcType=DECIMAL},
+            latitude =  #{latitude,jdbcType=DECIMAL},
+            address =  #{address,jdbcType=VARCHAR},
             PWD =  #{pwd,jdbcType=VARCHAR},
             PWD_CHECK =  #{pwdCheck,jdbcType=CHAR},
             ALIAS =  #{alias,jdbcType=VARCHAR},

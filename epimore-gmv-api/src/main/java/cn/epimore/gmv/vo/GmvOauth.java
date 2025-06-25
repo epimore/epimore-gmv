@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -31,6 +32,12 @@ public class GmvOauth extends BasePage implements Serializable {
      */
     @ApiModelProperty("设备域")
     private String domain;
+    @ApiModelProperty("经度")
+    private BigDecimal longitude;
+    @ApiModelProperty("维度")
+    private BigDecimal latitude;
+    @ApiModelProperty("地址")
+    private String address;
     /**
      * 密码
      */
