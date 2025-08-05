@@ -52,6 +52,7 @@ public class GmvOauthApiImpl implements GmvOauthApi {
         String domainId = seqName.substring(0, 10) + "2000000001";
         record.setDomain(domain);
         record.setDomainId(domainId);
+        record.setStatus("1");
         gmvDevice.setDeviceId(seqCode);
         record.setDeviceId(seqCode);
         gmvDeviceMapper.insert(gmvDevice);
