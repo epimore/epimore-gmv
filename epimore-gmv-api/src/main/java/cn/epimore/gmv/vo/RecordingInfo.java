@@ -8,8 +8,8 @@ public class RecordingInfo {
     @JsonProperty("file_size")
     private Long fileSize;
     private long timestamp;
-    @JsonProperty("bytes_sec")
-    private Integer bytesSec;
+//    @JsonProperty("bytes_sec")
+//    private Integer bytesSec;
 
     public String getFileName() {
         return fileName;
@@ -35,11 +35,11 @@ public class RecordingInfo {
         this.timestamp = timestamp;
     }
 
-    public Integer getBytesSec() {
-        return bytesSec;
-    }
-
-    public void setBytesSec(Integer bytesSec) {
-        this.bytesSec = bytesSec;
-    }
+//    public Integer getBytesSec() {
+//        return bytesSec;
+//    }
+//
+//    public void setBytesSec(Integer bytesSec) {
+//        this.bytesSec = bytesSec;
+//    }
 }

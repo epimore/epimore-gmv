@@ -185,42 +185,47 @@ public class DcOptApiImpl implements DcOptApi {
                     String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getDowning());
                     Map<String, Object> map = new HashMap<>();
                     map.put("stream_id", info.getBizId());
-                    map.put("stream_server", info.getNodeName());
+//                    map.put("stream_server", info.getNodeName());
                     GmvSessionResult<RecordingInfo> result = GmvHttpUtil.post(url, map, RecordingInfo.class);
                     if (result == null) {
+                        info.setStateStr("0.00|%");
                         logger.info("查询下载任务失败");
                         continue;
                     }
                     if (result.getCode() != 200) {
+                        info.setStateStr("0.00|%");
                         logger.info("查询下载任务失败,{}", result.getMsg());
                         continue;
                     }
                     RecordingInfo data = result.getData();
-
-                    String mbs = buildMbs(data.getBytesSec() * 8);
-                    //保留两位小数，装换为百分比字符串
+                    info.setSizeStr(buildFileSize(data.getFileSize()));
+//                    //保留两位小数，装换为百分比字符串
                     double ratio = (double) data.getTimestamp() / (et - st);
                     if (ratio > 0.9728) {
-                        info.setStateStr("97.28 %|" + mbs);
+                        info.setStateStr("97.28|%");
                     } else {
-                        String percentStr = String.format("%.2f %%", ratio * 100);
-                        info.setStateStr(percentStr + "|" + mbs);
+                        String percentStr = String.format("%.2f|%%", ratio * 100);
+                        info.setStateStr(percentStr);
                     }
                 } else {
                     switch (info.getState()) {
                         case 1:
-                            info.setStateStr("100.00 %|完成");
+                            info.setStateStr("100.00|%");
                             info.setSizeStr(buildFileSize(info.getSize()));
                             break;
                         case 2:
                             long bt = DateTimeUtil.toTimestampSeconds(info.getBizTime());
-                            double ratio = (double) (bt - st) / (et - st);
-                            String percentStr = String.format("%.2f %%", ratio * 100);
-                            info.setStateStr(percentStr + "|结束");
+                            long ct = DateTimeUtil.toTimestampSeconds(info.getCreateTime());
+                            double ratio = (double) (bt - ct) / (et - st);
+                            if (ratio>1.0){
+                                ratio=1.0;
+                            }
+                            String percentStr = String.format("%.2f|%%", ratio * 100);
+                            info.setStateStr(percentStr);
                             info.setSizeStr(buildFileSize(info.getSize()));
                             break;
                         case 3:
-                            info.setStateStr("0.00 %|失败");
+                            info.setStateStr("0.00|%");
                             break;
                     }
                 }
