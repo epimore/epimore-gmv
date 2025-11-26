@@ -3,6 +3,7 @@ package cn.epimore.gmv.gb28181.web;
 import cn.epimore.gmv.gb28181.service.api.EventApi;
 import cn.epimore.gmv.vo.AlarmInfo;
 import cn.epimore.gmv.vo.GmvSessionResult;
+import com.alibaba.fastjson2.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -25,8 +26,8 @@ public class EventController {
     @ApiOperation(value = "alarm", notes = "设备alarm事件")
     public GmvSessionResult<Boolean> alarm(@RequestBody AlarmInfo info) {
         try {
-//            logger.info("alarm:{}", JSON.toJSONString(info));
-            eventApi.handleAlarmEvent(null, info);
+            logger.debug("alarm:{}", JSON.toJSONString(info));
+            eventApi.handleAlarmEvent(info);
             return new GmvSessionResult<>(true, "success", 200);
         } catch (Exception e) {
             logger.error("alarm event:", e);

@@ -5,6 +5,7 @@ import cn.epimore.gmv.gb28181.utils.CurrentUserHelper;
 import cn.epimore.gmv.vo.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.jeecg.common.system.vo.LoginUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,11 @@ public class SseController {
     @CrossOrigin(origins = {"https://epimore.cn", "http://localhost:3100", "http://127.0.0.1:1573"}, allowCredentials = "true")
     public SseEmitter connect() {
         try {
-            String username = CurrentUserHelper.getSystemUser().getUsername();
+            LoginUser user = CurrentUserHelper.getSystemUser();
+            String username = user.getUsername();
+            String tenantIds = user.getRelTenantIds();
             logger.info("消息推送: 用户:{}，请求建立连接", username);
-            return sseApi.connect(username);
+            return sseApi.connect(username,tenantIds);
         } catch (Exception e) {
             logger.error("消息推送，连接失败:", e);
             return null;
