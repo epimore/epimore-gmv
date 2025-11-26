@@ -44,7 +44,7 @@ public class SseApiImpl implements SseApi {
         // 映射租户关系
         mapTenant(uid, tenantIds);
 
-        logger.info("SSE连接建立成功, uid: {}, tenantIds: {}", uid, tenantIds);
+        logger.debug("SSE连接建立成功, uid: {}, tenantIds: {}", uid, tenantIds);
         return emitter;
     }
 
@@ -53,17 +53,17 @@ public class SseApiImpl implements SseApi {
 
         emitter.onCompletion(() -> {
             cleanupConnection(uid);
-            logger.info("连接完成回调，uid = {}", uid);
+            logger.debug("连接完成回调，uid = {}", uid);
         });
 
         emitter.onTimeout(() -> {
             cleanupConnection(uid);
-            logger.info("连接超时，uid = {}", uid);
+            logger.debug("连接超时，uid = {}", uid);
         });
 
         emitter.onError(throwable -> {
             cleanupConnection(uid);
-            logger.error("连接异常，uid = {}, error = {}", uid, throwable.getMessage());
+            logger.debug("连接异常，uid = {}, error = {}", uid, throwable.getMessage());
         });
 
         return emitter;
@@ -131,7 +131,7 @@ public class SseApiImpl implements SseApi {
 
                 logger.debug("心跳发送成功, uid: {}", uid);
             } catch (Exception e) {
-                logger.warn("心跳发送失败，清理连接 uid = {}, error = {}", uid, e.getMessage());
+                logger.debug("心跳发送失败，清理连接 uid = {}, error = {}", uid, e.getMessage());
                 cleanupConnection(uid);
             }
         }, 30, 30, TimeUnit.SECONDS);
@@ -154,7 +154,7 @@ public class SseApiImpl implements SseApi {
 
     @Override
     public void close(String uid) {
-        logger.info("手动关闭SSE连接, uid: {}", uid);
+        logger.debug("手动关闭SSE连接, uid: {}", uid);
         cleanupConnection(uid);
     }
 
@@ -174,7 +174,7 @@ public class SseApiImpl implements SseApi {
             if (emitter != null) {
                 sendMsg(emitter, obj, uid);
             } else {
-                logger.warn("用户不在线，无法发送消息, uid: {}", uid);
+                logger.debug("用户不在线，无法发送消息, uid: {}", uid);
             }
         }
     }
@@ -183,7 +183,7 @@ public class SseApiImpl implements SseApi {
     public void sendDeviceMsg(String tenantId, Object msg) {
         Set<String> userSet = SSE_TENANT_CACHE.get(tenantId);
         if (userSet == null || userSet.isEmpty()) {
-            logger.warn("租户没有在线用户, tenantId: {}", tenantId);
+            logger.debug("租户没有在线用户, tenantId: {}", tenantId);
             return;
         }
 
@@ -205,14 +205,14 @@ public class SseApiImpl implements SseApi {
             }
         }
 
-        logger.info("设备消息发送完成, tenantId: {}, 成功: {}, 失败: {}", tenantId, successCount, failCount);
+        logger.debug("设备消息发送完成, tenantId: {}, 成功: {}, 失败: {}", tenantId, successCount, failCount);
     }
 
     @Override
     public void sendNotifyMsg(String tenantId, Object msg) {
         Set<String> userSet = SSE_TENANT_CACHE.get(tenantId);
         if (userSet == null || userSet.isEmpty()) {
-            logger.warn("租户没有在线用户, tenantId: {}", tenantId);
+            logger.debug("租户没有在线用户, tenantId: {}", tenantId);
             return;
         }
 
@@ -233,7 +233,7 @@ public class SseApiImpl implements SseApi {
             }
         }
 
-        logger.info("通知消息发送完成, tenantId: {}, 成功: {}, 失败: {}", tenantId, successCount, failCount);
+        logger.debug("通知消息发送完成, tenantId: {}, 成功: {}, 失败: {}", tenantId, successCount, failCount);
     }
 
     /**
@@ -249,7 +249,7 @@ public class SseApiImpl implements SseApi {
                         .reconnectTime(5000L));
                 return true;
             } catch (Exception e) {
-                logger.warn("发送消息失败，清理连接 uid = {}, error = {}", uid, e.getMessage());
+                logger.debug("发送消息失败，清理连接 uid = {}, error = {}", uid, e.getMessage());
                 cleanupConnection(uid);
                 return false;
             }
@@ -271,7 +271,7 @@ public class SseApiImpl implements SseApi {
 
             logger.debug("初始化消息发送成功, uid: {}", uid);
         } catch (IOException e) {
-            logger.error("发送初始化消息失败，uid = {}, error = {}", uid, e.getMessage());
+            logger.debug("发送初始化消息失败，uid = {}, error = {}", uid, e.getMessage());
         }
     }
 
@@ -282,8 +282,7 @@ public class SseApiImpl implements SseApi {
                     .data(JSON.toJSONString(obj))
                     .reconnectTime(1000L));
         } catch (Exception e) {
-            logger.error("发送消息失败，uid = {}, error = {}", uid, e.getMessage());
-            // 这里不直接清理，由回调处理
+            logger.debug("发送消息失败，uid = {}, error = {}", uid, e.getMessage());
         }
     }
 

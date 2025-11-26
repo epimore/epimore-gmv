@@ -45,29 +45,4 @@ public class EventApiImpl implements EventApi {
         }
         return String.valueOf(tenantId);
     }
-
-//    private boolean checkTenantId(String deviceId) {
-//        Object tenantIdObj = redisTemplate.opsForValue().get(DEVICE_INFO + deviceId);
-//        int tenantId;
-//        if (tenantIdObj == null) {
-//            tenantId = deviceInfoMapper.getTenantIdByDeviceId(deviceId);
-//            redisTemplate.opsForValue().set(DEVICE_INFO + deviceId, tenantId);
-//        } else {
-//            tenantId = Integer.parseInt(tenantIdObj.toString());
-//        }
-//
-//        String c_tenantId = TenantContext.getTenant();
-//        //如果通过线程获取租户ID为空，则通过当前请求的request获取租户（shiro排除拦截器的请求会获取不到租户ID）
-//        if (oConvertUtils.isEmpty(c_tenantId)) {
-//            try {
-//                c_tenantId = TokenUtils.getTenantIdByRequest(SpringContextUtils.getHttpServletRequest());
-//            } catch (Exception e) {
-//                //e.printStackTrace();
-//            }
-//        }
-//        if (oConvertUtils.isEmpty(c_tenantId)) {
-//            c_tenantId = "0";
-//        }
-//        return StringUtils.equals(c_tenantId, String.valueOf(tenantId));
-//    }
 }
