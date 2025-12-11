@@ -10,8 +10,6 @@
             <result property="registerExpires" column="REGISTER_EXPIRES" jdbcType="INTEGER"/>
             <result property="registerTime" column="REGISTER_TIME" jdbcType="BIGINT"/>
             <result property="localAddr" column="LOCAL_ADDR" jdbcType="VARCHAR"/>
-            <result property="sipFrom" column="SIP_FROM" jdbcType="VARCHAR"/>
-            <result property="sipTo" column="SIP_TO" jdbcType="VARCHAR"/>
             <result property="deviceType" column="DEVICE_TYPE" jdbcType="VARCHAR"/>
             <result property="manufacturer" column="MANUFACTURER" jdbcType="VARCHAR"/>
             <result property="model" column="MODEL" jdbcType="VARCHAR"/>
@@ -24,8 +22,7 @@
 
     <sql id="Base_Column_List">
         DEVICE_ID,TRANSPORT,REGISTER_EXPIRES,
-        REGISTER_TIME,LOCAL_ADDR,SIP_FROM,
-        SIP_TO,DEVICE_TYPE,MANUFACTURER,
+        REGISTER_TIME,LOCAL_ADDR,DEVICE_TYPE,MANUFACTURER,
         MODEL,FIRMWARE,MAX_CAMERA,
         STATUS,GB_VERSION,LAST_UPDATE_TIME
     </sql>
@@ -49,14 +46,12 @@
     <insert id="insert" keyColumn="DEVICE_ID" keyProperty="deviceId" parameterType="cn.epimore.gmv.vo.GmvDevice" useGeneratedKeys="true">
         insert into GMV_DEVICE
         ( DEVICE_ID, TRANSPORT, REGISTER_EXPIRES
-        , REGISTER_TIME, LOCAL_ADDR, SIP_FROM
-        , SIP_TO, DEVICE_TYPE, MANUFACTURER
+        , REGISTER_TIME, LOCAL_ADDR, DEVICE_TYPE, MANUFACTURER
         , MODEL, FIRMWARE, MAX_CAMERA
         , STATUS, GB_VERSION, LAST_UPDATE_TIME, CREATE_TIME
         , create_by, sys_org_code, tenant_id, update_by, update_time)
         values ( #{deviceId,jdbcType=VARCHAR}, #{transport,jdbcType=VARCHAR}, #{registerExpires,jdbcType=INTEGER}
-               , #{registerTime,jdbcType=BIGINT}, #{localAddr,jdbcType=VARCHAR}, #{sipFrom,jdbcType=VARCHAR}
-               , #{sipTo,jdbcType=VARCHAR}, #{deviceType,jdbcType=VARCHAR}, #{manufacturer,jdbcType=VARCHAR}
+               , #{registerTime,jdbcType=BIGINT}, #{localAddr,jdbcType=VARCHAR}, #{deviceType,jdbcType=VARCHAR}, #{manufacturer,jdbcType=VARCHAR}
                , #{model,jdbcType=VARCHAR}, #{firmware,jdbcType=VARCHAR}, #{maxCamera,jdbcType=INTEGER}
                , #{status,jdbcType=INTEGER}, #{gbVersion,jdbcType=VARCHAR}, #{lastUpdateTime,jdbcType=TIMESTAMP}
                , #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{sysOrgCode,jdbcType=VARCHAR},
@@ -70,8 +65,6 @@
                 <if test="registerExpires != null">REGISTER_EXPIRES,</if>
                 <if test="registerTime != null">REGISTER_TIME,</if>
                 <if test="localAddr != null">LOCAL_ADDR,</if>
-                <if test="sipFrom != null">SIP_FROM,</if>
-                <if test="sipTo != null">SIP_TO,</if>
                 <if test="deviceType != null">DEVICE_TYPE,</if>
                 <if test="manufacturer != null">MANUFACTURER,</if>
                 <if test="model != null">MODEL,</if>
@@ -87,8 +80,6 @@
                 <if test="registerExpires != null">#{registerExpires,jdbcType=INTEGER},</if>
                 <if test="registerTime != null">#{registerTime,jdbcType=BIGINT},</if>
                 <if test="localAddr != null">#{localAddr,jdbcType=VARCHAR},</if>
-                <if test="sipFrom != null">#{sipFrom,jdbcType=VARCHAR},</if>
-                <if test="sipTo != null">#{sipTo,jdbcType=VARCHAR},</if>
                 <if test="deviceType != null">#{deviceType,jdbcType=VARCHAR},</if>
                 <if test="manufacturer != null">#{manufacturer,jdbcType=VARCHAR},</if>
                 <if test="model != null">#{model,jdbcType=VARCHAR},</if>
@@ -113,12 +104,6 @@
                 </if>
                 <if test="localAddr != null">
                     LOCAL_ADDR = #{localAddr,jdbcType=VARCHAR},
-                </if>
-                <if test="sipFrom != null">
-                    SIP_FROM = #{sipFrom,jdbcType=VARCHAR},
-                </if>
-                <if test="sipTo != null">
-                    SIP_TO = #{sipTo,jdbcType=VARCHAR},
                 </if>
                 <if test="deviceType != null">
                     DEVICE_TYPE = #{deviceType,jdbcType=VARCHAR},
@@ -154,8 +139,6 @@
             REGISTER_EXPIRES =  #{registerExpires,jdbcType=INTEGER},
             REGISTER_TIME =  #{registerTime,jdbcType=BIGINT},
             LOCAL_ADDR =  #{localAddr,jdbcType=VARCHAR},
-            SIP_FROM =  #{sipFrom,jdbcType=VARCHAR},
-            SIP_TO =  #{sipTo,jdbcType=VARCHAR},
             DEVICE_TYPE =  #{deviceType,jdbcType=VARCHAR},
             MANUFACTURER =  #{manufacturer,jdbcType=VARCHAR},
             MODEL =  #{model,jdbcType=VARCHAR},

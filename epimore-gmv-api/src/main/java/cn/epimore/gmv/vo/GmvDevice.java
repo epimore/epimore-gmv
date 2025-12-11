@@ -50,20 +50,6 @@ public class GmvDevice implements Serializable {
 
     private String localAddr;
     /**
-     * 请求发送者
-     */
-
-    @ApiModelProperty("请求发送者")
-
-    private String sipFrom;
-    /**
-     * 请求接收者
-     */
-
-    @ApiModelProperty("请求接收者")
-
-    private String sipTo;
-    /**
      * 设备类型IPC/NVR/DVR...
      */
 
