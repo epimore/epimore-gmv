@@ -132,7 +132,7 @@
         <if test="endTime != null">
             AND a.BIZ_TIME &lt; #{endTime,jdbcType=TIMESTAMP}
         </if>
-        ORDER BY a.ID ASC
+        ORDER BY a.ID DESC
     </select>
     <select id="getRecordVideoInfos" resultType="cn.epimore.gmv.vo.RecordVideoInfo">
         SELECT b.ID                                                     fileId,
