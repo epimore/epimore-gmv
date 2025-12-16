@@ -36,11 +36,10 @@
         MAX_CAMERA,
         IF(d.`status` = 1 AND DATE_ADD(d.register_time,INTERVAL d.register_expires SECOND)>NOW(), 1, 0) AS `STATUS`,
         GB_VERSION,
-        sum(if(c.PARENT_ID=c.DEVICE_ID,0,1)) AS cameraInCount,
+        COUNT(c.channel_id) AS cameraInCount,
         IF
         (
-        d.`status` = 0
-        OR NOW()>DATE_ADD( d.register_time, INTERVAL d.register_expires SECOND ),
+        d.`status` = 0 OR NOW()>DATE_ADD( d.register_time, INTERVAL d.register_expires SECOND ),
         COUNT(c.channel_id),
         SUM( c.`status` = 'OFF' OR c.`status` = 'OFFLINE' )) AS cameraOffCount
         FROM GMV_DEVICE d
@@ -116,7 +115,6 @@
                                  c.over_pic_id)
 
         where d.DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
-          and c.MODEL not like '%udio%'
         order by c.CHANNEL_ID
     </select>
     <select id="getImageInfo" resultType="cn.epimore.gmv.vo.ImageInfo">
