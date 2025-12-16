@@ -2,6 +2,7 @@ package cn.epimore.gmv.gb28181.service.impl;
 
 import cn.epimore.gmv.gb28181.cfg.GmvApiConfig;
 import cn.epimore.gmv.gb28181.mapper.DeviceInfoMapper;
+import cn.epimore.gmv.gb28181.mapper.GmvDeviceChannelMapper;
 import cn.epimore.gmv.gb28181.service.api.DcOptApi;
 import cn.epimore.gmv.gb28181.utils.DateTimeUtil;
 import cn.epimore.gmv.gb28181.utils.GmvHttpUtil;
@@ -23,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,11 +35,13 @@ public class DcOptApiImpl implements DcOptApi {
 
     private final GmvApiConfig gmvApiConfig;
     private final DeviceInfoMapper deviceInfoMapper;
+    private final GmvDeviceChannelMapper gmvDeviceChannelMapper;
 
     @Autowired
-    public DcOptApiImpl(GmvApiConfig gmvApiConfig, DeviceInfoMapper deviceInfoMapper) {
+    public DcOptApiImpl(GmvApiConfig gmvApiConfig, DeviceInfoMapper deviceInfoMapper, GmvDeviceChannelMapper gmvDeviceChannelMapper) {
         this.gmvApiConfig = gmvApiConfig;
         this.deviceInfoMapper = deviceInfoMapper;
+        this.gmvDeviceChannelMapper = gmvDeviceChannelMapper;
     }
 
     @Override
@@ -232,6 +236,30 @@ public class DcOptApiImpl implements DcOptApi {
             }
         }
         return infos;
+    }
+
+    @Override
+    public String snapshotImage(IdMap idMap) {
+        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getSnapshotImage());
+        Map<String, String> device_channel_ident = new HashMap<>();
+        device_channel_ident.put("device_id", idMap.getDeviceId());
+        device_channel_ident.put("channel_id", idMap.getChannelId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("device_channel_ident", device_channel_ident);
+        map.put("count", 1);
+        GmvSessionResult<String> result = GmvHttpUtil.post(url, map, String.class);
+        if (result == null) {
+            throw new RuntimeException("采集画面快照失败");
+        }
+        if (result.getCode() != 200) {
+            GmvDeviceChannel gmvDeviceChannel = new GmvDeviceChannel();
+            gmvDeviceChannel.setDeviceId(idMap.getDeviceId());
+            gmvDeviceChannel.setChannelId(idMap.getChannelId());
+            gmvDeviceChannel.setSnapshot(2);
+            gmvDeviceChannelMapper.updateByPrimaryKeySelective(gmvDeviceChannel);
+            throw new RuntimeException(result.getMsg());
+        }
+        return result.getData();
     }
 
     @Override

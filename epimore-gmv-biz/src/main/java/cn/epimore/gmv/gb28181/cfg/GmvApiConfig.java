@@ -17,6 +17,7 @@ public class GmvApiConfig {
     private String teardown;
     private String downing;
     private String rmFile;
+    private String snapshotImage;
 
     public String getHost() {
         return host;
@@ -28,6 +29,14 @@ public class GmvApiConfig {
 
     public String getPlayLive() {
         return playLive;
+    }
+
+    public String getSnapshotImage() {
+        return snapshotImage;
+    }
+
+    public void setSnapshotImage(String snapshotImage) {
+        this.snapshotImage = snapshotImage;
     }
 
     public void setPlayLive(String playLive) {

@@ -101,7 +101,7 @@ pagehelper:
 gmv:
   seqName: 34020000001117
   api:
-    host: http://127.0.0.1:18567
+    host: https://epimore.cn
     #    host: http://172.18.38.186:18567
     playLive: /session/api/play/live/stream
     playBack: /session/api/play/back/stream
@@ -112,3 +112,4 @@ gmv:
     teardown: /session/api/download/stop
     downing: /session/api/downing/info
     rmFile: /session/api/rm/file
+    snapshotImage: /session/edge/snapshot/image

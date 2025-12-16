@@ -33,6 +33,9 @@ public interface DcOptApi {
     //查看下载任务
     List<RecordVideoInfo> downTaskInfo(IdMap idMap);
 
+    //采集当前画面快照
+    String snapshotImage(IdMap idMap);
+
     //删除文件
     boolean rmFile(Long fileId);
 

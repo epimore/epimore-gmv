@@ -119,6 +119,19 @@ public class DcOptController {
         }
     }
 
+    @PostMapping("/snapshot/image")
+    @ApiOperation(value = "/snapshot/image", notes = "采集当前画面快照")
+    public ResponseEntity<String> snapshotImage(@RequestBody @NotNull IdMap idMap) {
+        logger.info("snapshotImage:{}", JSON.toJSONString(idMap));
+        try {
+            String res = dcOptApi.snapshotImage(idMap);
+            return Result.success(res);
+        } catch (Exception e) {
+            logger.error("snapshotImage", e);
+            return Result.failure("采集画面快照失败.");
+        }
+    }
+
     @PostMapping("/teardown/task")
     @ApiOperation(value = "/teardown/task", notes = "结束下载")
     public ResponseEntity<Boolean> tearDownTask(@RequestBody @NotNull SingleParamModel<String> req) {

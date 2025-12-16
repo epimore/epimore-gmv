@@ -99,6 +99,7 @@
                c.PTZ_TYPE,
                c.SUPPLY_LIGHT_TYPE,
                c.ALIAS_NAME,
+               c.SNAPSHOT,
                CONCAT(a.DIR_PATH, "/", a.FILE_NAME, ".", a.FILE_FORMAT) picUrl
         FROM GMV_DEVICE d
                  INNER JOIN GMV_DEVICE_CHANNEL c
