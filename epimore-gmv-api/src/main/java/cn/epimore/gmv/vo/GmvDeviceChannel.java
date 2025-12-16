@@ -117,6 +117,16 @@ public class GmvDeviceChannel implements Serializable {
     private String picUrl;
     @ApiModelProperty("是否启用拍照：0-否，1-是，2-设备不支持；默认1")
     private Integer snapshot;
+    @ApiModelProperty("封面图片ID")
+    private Long overPicId;
+
+    public Long getOverPicId() {
+        return overPicId;
+    }
+
+    public void setOverPicId(Long overPicId) {
+        this.overPicId = overPicId;
+    }
 
     public Integer getSnapshot() {
         return snapshot;

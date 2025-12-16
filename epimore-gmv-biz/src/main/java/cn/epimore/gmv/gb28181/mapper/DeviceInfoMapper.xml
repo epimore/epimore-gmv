@@ -105,14 +105,18 @@
                  INNER JOIN GMV_DEVICE_CHANNEL c
                             ON d.DEVICE_ID = c.DEVICE_ID
                  LEFT JOIN GMV_FILE_INFO a
-                           ON a.ID = (SELECT MAX(ID)
-                                      FROM GMV_FILE_INFO
-                                      WHERE FILE_TYPE = 0
-                                        AND IS_DEL = 0
-                                        and DEVICE_ID = c.DEVICE_ID
-                                        AND CHANNEL_ID = c.CHANNEL_ID)
+                           ON a.ID =
+                              if(c.over_pic_id = 0 or c.over_pic_id is null,
+                                 (SELECT MAX(ID)
+                                  FROM GMV_FILE_INFO
+                                  WHERE FILE_TYPE = 0
+                                    AND IS_DEL = 0
+                                    and DEVICE_ID = c.DEVICE_ID
+                                    AND CHANNEL_ID = c.CHANNEL_ID),
+                                 c.over_pic_id)
+
         where d.DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
-        and c.MODEL not like '%udio%'
+          and c.MODEL not like '%udio%'
         order by c.CHANNEL_ID
     </select>
     <select id="getImageInfo" resultType="cn.epimore.gmv.vo.ImageInfo">
@@ -121,8 +125,12 @@
         a.NOTE note,
         CONCAT(a.DIR_PATH, "/", a.FILE_NAME, ".", a.FILE_FORMAT) picUrl,
         a.FILE_SIZE picSize,
-        a.BIZ_TIME bizTime
+        a.BIZ_TIME bizTime,
+        if(c.over_pic_id = a.ID, 1, 0) overImage,
+        a.DEVICE_ID deviceId,
+        a.CHANNEL_ID channelId
         FROM GMV_FILE_INFO a
+        inner join GMV_DEVICE_CHANNEL c on a.DEVICE_ID = c.DEVICE_ID and a.CHANNEL_ID = c.CHANNEL_ID
         WHERE a.DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
         AND a.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
         AND a.IS_DEL = 0

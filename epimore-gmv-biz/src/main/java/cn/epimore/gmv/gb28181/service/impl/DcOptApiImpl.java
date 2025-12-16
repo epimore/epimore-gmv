@@ -256,10 +256,20 @@ public class DcOptApiImpl implements DcOptApi {
             gmvDeviceChannel.setDeviceId(idMap.getDeviceId());
             gmvDeviceChannel.setChannelId(idMap.getChannelId());
             gmvDeviceChannel.setSnapshot(2);
+            logger.warn(result.getMsg());
             gmvDeviceChannelMapper.updateByPrimaryKeySelective(gmvDeviceChannel);
-            throw new RuntimeException(result.getMsg());
+            return null;
         }
         return result.getData();
+    }
+
+    @Override
+    public void overviewImage(OverImageID imageID) {
+        GmvDeviceChannel gmvDeviceChannel = new GmvDeviceChannel();
+        gmvDeviceChannel.setDeviceId(imageID.getDeviceId());
+        gmvDeviceChannel.setChannelId(imageID.getChannelId());
+        gmvDeviceChannel.setOverPicId(imageID.getImageId());
+        gmvDeviceChannelMapper.updateByPrimaryKeySelective(gmvDeviceChannel);
     }
 
     @Override

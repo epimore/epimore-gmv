@@ -26,6 +26,7 @@
             <result property="supplyLightType" column="SUPPLY_LIGHT_TYPE" jdbcType="CHAR"/>
             <result property="aliasName" column="ALIAS_NAME" jdbcType="VARCHAR"/>
             <result property="snapshot" column="SNAPSHOT" jdbcType="INTEGER"/>
+            <result property="overPicId" column="over_pic_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -35,7 +36,8 @@
         PARENTAL,BLOCK,PARENT_ID,
         IP_ADDRESS,PORT,PASSWORD,
         LONGITUDE,LATITUDE,PTZ_TYPE,
-        SUPPLY_LIGHT_TYPE,ALIAS_NAME,SNAPSHOT
+        SUPPLY_LIGHT_TYPE,ALIAS_NAME,SNAPSHOT,
+        over_pic_id
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="cn.epimore.gmv.vo.IdMap" resultMap="BaseResultMap">
@@ -172,6 +174,9 @@
                 </if>
                 <if test="snapshot != null">
                     SNAPSHOT = #{snapshot,jdbcType=INTEGER},
+                </if>
+                <if test="overPicId != null">
+                    over_pic_id = #{overPicId,jdbcType=BIGINT},
                 </if>
         </set>
         where   DEVICE_ID = #{deviceId,jdbcType=VARCHAR} AND CHANNEL_ID = #{channelId,jdbcType=VARCHAR} 

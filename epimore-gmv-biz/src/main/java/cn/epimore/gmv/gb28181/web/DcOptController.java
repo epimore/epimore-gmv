@@ -5,6 +5,7 @@ import cn.epimore.gmv.vo.*;
 import com.alibaba.fastjson2.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +130,18 @@ public class DcOptController {
         } catch (Exception e) {
             logger.error("snapshotImage", e);
             return Result.failure("采集画面快照失败.");
+        }
+    }
+    @PostMapping("/overview/image")
+    @ApiOperation(value = "/overview/image", notes = "取消/设置设备封面图片")
+    public ResponseEntity<String> overviewImage(@RequestBody @NotNull OverImageID imageID) {
+        logger.info("overviewImage:{}", JSON.toJSONString(imageID));
+        try {
+            dcOptApi.overviewImage(imageID);
+            return Result.success(null);
+        } catch (Exception e) {
+            logger.error("overviewImage", e);
+            return Result.failure("取消/设置设备封面图片失败.");
         }
     }
 

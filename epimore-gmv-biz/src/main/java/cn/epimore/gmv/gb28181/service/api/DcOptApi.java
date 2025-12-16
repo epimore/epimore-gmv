@@ -36,6 +36,9 @@ public interface DcOptApi {
     //采集当前画面快照
     String snapshotImage(IdMap idMap);
 
+    //取消/设置设备封面图片
+    void overviewImage(OverImageID imageID);
+
     //删除文件
     boolean rmFile(Long fileId);
 
