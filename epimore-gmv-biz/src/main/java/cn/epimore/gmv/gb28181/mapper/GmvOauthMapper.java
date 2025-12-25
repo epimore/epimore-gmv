@@ -18,7 +18,7 @@ public interface GmvOauthMapper {
 
 //    int insertSelective(GmvOauth record);
 
-    GmvOauth selectByPrimaryKey(Long id);
+    GmvOauth selectByPrimaryKey(String id);
 
     int updateByPrimaryKeySelective(GmvOauth record);
 

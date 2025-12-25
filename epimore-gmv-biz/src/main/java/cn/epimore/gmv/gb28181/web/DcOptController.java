@@ -5,7 +5,6 @@ import cn.epimore.gmv.vo.*;
 import com.alibaba.fastjson2.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,10 +146,10 @@ public class DcOptController {
 
     @PostMapping("/teardown/task")
     @ApiOperation(value = "/teardown/task", notes = "结束下载")
-    public ResponseEntity<Boolean> tearDownTask(@RequestBody @NotNull SingleParamModel<String> req) {
+    public ResponseEntity<Boolean> tearDownTask(@RequestBody @NotNull PairParamModel<String,String> req) {
         logger.info("tearDownTask:{}", JSON.toJSONString(req));
         try {
-            boolean b = dcOptApi.tearDownTask(req.getParam());
+            boolean b = dcOptApi.tearDownTask(req);
             return Result.success(b);
         } catch (Exception e) {
             logger.error("tearDownTask", e);
@@ -160,10 +159,10 @@ public class DcOptController {
 
     @PostMapping("/rm/file")
     @ApiOperation(value = "/rm/file", notes = "物联删除文件")
-    public ResponseEntity<Boolean> rmFile(@RequestBody @NotNull SingleParamModel<Long> req) {
+    public ResponseEntity<Boolean> rmFile(@RequestBody @NotNull PairParamModel<String,Long> req) {
         logger.info("rmFile:{}", JSON.toJSONString(req));
         try {
-            boolean b = dcOptApi.rmFile(req.getParam());
+            boolean b = dcOptApi.rmFile(req);
             return Result.success(b);
         } catch (Exception e) {
             logger.error("rmFile", e);

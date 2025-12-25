@@ -1,7 +1,8 @@
 package cn.epimore.gmv.gb28181.service.impl;
 
-import cn.epimore.gmv.gb28181.cfg.GmvApiConfig;
+import cn.epimore.gmv.cons.ApiPathConstants;
 import cn.epimore.gmv.gb28181.mapper.DeviceInfoMapper;
+import cn.epimore.gmv.gb28181.mapper.GbDomainInfoMapper;
 import cn.epimore.gmv.gb28181.mapper.GmvDeviceChannelMapper;
 import cn.epimore.gmv.gb28181.service.api.DcOptApi;
 import cn.epimore.gmv.gb28181.utils.DateTimeUtil;
@@ -24,7 +25,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,20 +33,35 @@ import java.util.Map;
 public class DcOptApiImpl implements DcOptApi {
     private final static Logger logger = LoggerFactory.getLogger(DcOptApiImpl.class);
 
-    private final GmvApiConfig gmvApiConfig;
     private final DeviceInfoMapper deviceInfoMapper;
     private final GmvDeviceChannelMapper gmvDeviceChannelMapper;
+    private final GbDomainInfoMapper gbDomainInfoMapper;
 
     @Autowired
-    public DcOptApiImpl(GmvApiConfig gmvApiConfig, DeviceInfoMapper deviceInfoMapper, GmvDeviceChannelMapper gmvDeviceChannelMapper) {
-        this.gmvApiConfig = gmvApiConfig;
+    public DcOptApiImpl(DeviceInfoMapper deviceInfoMapper,
+                        GmvDeviceChannelMapper gmvDeviceChannelMapper, GbDomainInfoMapper gbDomainInfoMapper) {
         this.deviceInfoMapper = deviceInfoMapper;
         this.gmvDeviceChannelMapper = gmvDeviceChannelMapper;
+        this.gbDomainInfoMapper = gbDomainInfoMapper;
+    }
+
+    private String getSessionSourceUrl(String deviceId) {
+        SessionSourceVo sourceVo = gbDomainInfoMapper.getSessionSourceVo(deviceId);
+        if (sourceVo == null) {
+            throw new RuntimeException("设备未知或已注销");
+        }
+        if (sourceVo.getDeviceStatus()==0){
+            throw new RuntimeException("设备已禁用");
+        }
+        if (sourceVo.getServerStatus()==0){
+            throw new RuntimeException("信令服务已禁用");
+        }
+        return sourceVo.getHttpSource();
     }
 
     @Override
     public StreamUri getPlayLiveUri(IdMap idMap) {
-        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getPlayLive());
+        String url = String.format("%s%s", getSessionSourceUrl(idMap.getDeviceId()), ApiPathConstants.PLAY_LIVE);
         Map<String, String> map = new HashMap<>();
         map.put("device_id", idMap.getDeviceId());
         map.put("channel_id", idMap.getChannelId());
@@ -62,7 +77,7 @@ public class DcOptApiImpl implements DcOptApi {
 
     @Override
     public StreamUri getPlayBackUri(PlayBackReq backReq) {
-        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getPlayBack());
+        String url = String.format("%s%s", getSessionSourceUrl(backReq.getDeviceId()), ApiPathConstants.PLAY_BACK);
         Map<String, Object> map = new HashMap<>();
         map.put("device_id", backReq.getDeviceId());
         map.put("channel_id", backReq.getChannelId());
@@ -83,7 +98,7 @@ public class DcOptApiImpl implements DcOptApi {
 
     @Override
     public boolean cmdPlayBackSeek(PlaySeekModel seekModel) {
-        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getPlayBackSeek());
+        String url = String.format("%s%s", getSessionSourceUrl(seekModel.getDeviceId()), ApiPathConstants.PLAY_BACK_SEEK);
         Map<String, Object> map = new HashMap<>();
         map.put("streamId", seekModel.getStreamId());
         map.put("seekSecond", seekModel.getSeekSecond());
@@ -99,7 +114,7 @@ public class DcOptApiImpl implements DcOptApi {
 
     @Override
     public boolean cmdPlayBackSpeed(PlaySpeedModel speedModel) {
-        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getPlayBackSpeed());
+        String url = String.format("%s%s", getSessionSourceUrl(speedModel.getDeviceId()), ApiPathConstants.PLAY_BACK_SPEED);
         Map<String, Object> map = new HashMap<>();
         map.put("streamId", speedModel.getStreamId());
         map.put("speedRate", speedModel.getSpeedRate());
@@ -115,10 +130,7 @@ public class DcOptApiImpl implements DcOptApi {
 
     @Override
     public boolean cmdControlPtz(PtzControlModel ptzControlModel) {
-        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getPtz());
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("streamId", speedModel.getStreamId());
-//        map.put("speedRate", speedModel.getSpeedRate());
+        String url = String.format("%s%s", getSessionSourceUrl(ptzControlModel.getDeviceId()), ApiPathConstants.PTZ);
         GmvSessionResult<Boolean> result = GmvHttpUtil.post(url, ptzControlModel, Boolean.class);
         if (result == null) {
             throw new RuntimeException("云台控制失败");
@@ -147,7 +159,7 @@ public class DcOptApiImpl implements DcOptApi {
         if (count > 0) {
             throw new RuntimeException("该设备已存在下载任务");
         }
-        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getDownload());
+        String url = String.format("%s%s", getSessionSourceUrl(backReq.getDeviceId()), ApiPathConstants.DOWNLOAD);
         Map<String, Object> map = new HashMap<>();
         map.put("device_id", backReq.getDeviceId());
         map.put("channel_id", backReq.getChannelId());
@@ -164,10 +176,10 @@ public class DcOptApiImpl implements DcOptApi {
     }
 
     @Override
-    public boolean tearDownTask(String bizId) {
-        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getTeardown());
+    public boolean tearDownTask(PairParamModel<String,String> req) {
+        String url = String.format("%s%s", getSessionSourceUrl(req.getParam1()), ApiPathConstants.TEARDOWN);
         Map<String, Object> map = new HashMap<>();
-        map.put("param", bizId);
+        map.put("param", req.getParam2());
         GmvSessionResult<Boolean> result = GmvHttpUtil.post(url, map, Boolean.class);
         if (result == null) {
             throw new RuntimeException("停止失败");
@@ -186,7 +198,7 @@ public class DcOptApiImpl implements DcOptApi {
                 long st = DateTimeUtil.toTimestampSeconds(info.getStartTime());
                 long et = DateTimeUtil.toTimestampSeconds(info.getEndTime());
                 if (info.getState() == 0 && StringUtils.isNotEmpty(info.getBizId())) {
-                    String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getDowning());
+                    String url = String.format("%s%s", getSessionSourceUrl(idMap.getDeviceId()), ApiPathConstants.DOWNING);
                     Map<String, Object> map = new HashMap<>();
                     map.put("stream_id", info.getBizId());
 //                    map.put("stream_server", info.getNodeName());
@@ -240,7 +252,7 @@ public class DcOptApiImpl implements DcOptApi {
 
     @Override
     public String snapshotImage(IdMap idMap) {
-        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getSnapshotImage());
+        String url = String.format("%s%s", getSessionSourceUrl(idMap.getDeviceId()), ApiPathConstants.SNAPSHOT_IMAGE);
         Map<String, String> device_channel_ident = new HashMap<>();
         device_channel_ident.put("device_id", idMap.getDeviceId());
         device_channel_ident.put("channel_id", idMap.getChannelId());
@@ -273,10 +285,10 @@ public class DcOptApiImpl implements DcOptApi {
     }
 
     @Override
-    public boolean rmFile(Long fileId) {
-        String url = String.format("%s%s", gmvApiConfig.getHost(), gmvApiConfig.getRmFile());
+    public boolean rmFile(PairParamModel<String,Long> req) {
+        String url = String.format("%s%s", getSessionSourceUrl(req.getParam1()), ApiPathConstants.RM_FILE);
         Map<String, Object> map = new HashMap<>();
-        map.put("param", fileId);
+        map.put("param", req.getParam2());
         GmvSessionResult<Boolean> result = GmvHttpUtil.post(url, map, Boolean.class);
         if (result == null) {
             throw new RuntimeException("删除失败");
@@ -308,18 +320,6 @@ public class DcOptApiImpl implements DcOptApi {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(resource);
-    }
-
-    private static String buildMbs(Integer bytesSec) {
-        if (bytesSec == null) {
-            return "-";
-        } else if (bytesSec >= 1000000) {
-            return bytesSec / 1000000 + "Mb/s";
-        } else if (bytesSec >= 1000) {
-            return bytesSec / 1000 + "Kb/s";
-        } else {
-            return bytesSec + "B/s";
-        }
     }
 
     private static String buildFileSize(double size) {

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.epimore.gmv.gb28181.mapper.GbDomainInfoMapper">
+
+
+    <select id="getGbServerInfoList" resultType="cn.epimore.gmv.vo.GbServerInfo">
+        SELECT a.domain_id,
+               a.domain,
+               a.sip_ip,
+               a.sip_port,
+               a.http_source,
+               a.`status`,
+               CASE
+                   WHEN a.STATUS = 1
+                       AND a.heart_time IS NOT NULL
+                       AND a.heart_cycle IS NOT NULL
+                       AND a.heart_time >= NOW() - INTERVAL (3 * a.heart_cycle) SECOND THEN
+                       1
+                   ELSE 0
+                   END  online,
+               b.`name` areaName,
+               c.`name` industryName
+        FROM GB_SERVER a
+                 LEFT JOIN C_AREA_CODE b ON b.`code` = CONCAT(LEFT(a.domain_id, 8), '0000')
+                 LEFT JOIN GMV_ENUM_CODE c ON c.parent_id = '1001'
+            AND c.value_start = SUBSTRING(a.domain_id, 9, 2)
+        order by a.domain_id desc
+    </select>
+    <select id="getSessionSourceVo" resultType="cn.epimore.gmv.vo.SessionSourceVo">
+        select a.status deviceStatus, b.status serverStatus, b.http_source httpSource
+        from GMV_OAUTH a
+                 inner join GB_SERVER b on a.domain_id = b.domain_id
+        where a.DEL = 0
+          and a.DEVICE_ID = #{deviceId}
+    </select>
+</mapper>

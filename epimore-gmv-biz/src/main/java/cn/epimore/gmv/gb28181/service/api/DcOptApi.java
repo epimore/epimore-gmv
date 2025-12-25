@@ -28,7 +28,7 @@ public interface DcOptApi {
     boolean createDownloadTask(PlayBackReq backReq);
 
     //停止下载任务
-    boolean tearDownTask(String bizId);
+    boolean tearDownTask(PairParamModel<String,String> req);
 
     //查看下载任务
     List<RecordVideoInfo> downTaskInfo(IdMap idMap);
@@ -40,7 +40,7 @@ public interface DcOptApi {
     void overviewImage(OverImageID imageID);
 
     //删除文件
-    boolean rmFile(Long fileId);
+    boolean rmFile(PairParamModel<String,Long> req);
 
     ResponseEntity<Resource> downloadFile(Long fileId) throws UnsupportedEncodingException;
 }

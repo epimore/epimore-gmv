@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.epimore.gmv.gb28181.mapper.GmvEnumCodeVoMapper">
+
+    <resultMap id="BaseResultMap" type="cn.epimore.gmv.vo.GmvEnumCodeVo">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="parentId" column="parent_id" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="valueStart" column="value_start" jdbcType="VARCHAR"/>
+            <result property="valueEnd" column="value_end" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="seq" column="seq" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,biz_code,parent_id,
+        name,value_start,value_end,
+        remark,seq,status,
+        created_at
+    </sql>
+</mapper>

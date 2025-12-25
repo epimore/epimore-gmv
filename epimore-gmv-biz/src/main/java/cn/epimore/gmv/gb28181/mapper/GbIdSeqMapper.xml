@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.epimore.gmv.gb28181.mapper.GbIdSeqMapper">
+
+    <resultMap id="BaseResultMap" type="cn.epimore.gmv.vo.GbIdSeq">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="domainId" column="domain_id" jdbcType="VARCHAR"/>
+            <result property="centerCode" column="center_code" jdbcType="VARCHAR"/>
+            <result property="industryCode" column="industry_code" jdbcType="VARCHAR"/>
+            <result property="typeCode" column="type_code" jdbcType="VARCHAR"/>
+            <result property="networkCode" column="network_code" jdbcType="CHAR"/>
+            <result property="seq" column="seq" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,domain_id,center_code,
+        industry_code,type_code,network_code,
+        seq,status,create_date
+    </sql>
+</mapper>

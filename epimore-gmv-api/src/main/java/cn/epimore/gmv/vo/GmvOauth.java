@@ -17,50 +17,30 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class GmvOauth extends BasePage implements Serializable {
-    /**
-     * 中心8行业2类型3网络1序号6
-     */
     @ApiModelProperty("中心8行业2类型3网络1序号6")
     private String deviceId;
-    /**
-     * 设备域ID
-     */
     @ApiModelProperty("设备域ID")
     private String domainId;
-    /**
-     * 设备域
-     */
     @ApiModelProperty("设备域")
     private String domain;
+    @ApiModelProperty("设备类型")
+    private String typeCode;
+    @ApiModelProperty("网络类型")
+    private String networkCode;
     @ApiModelProperty("经度")
     private BigDecimal longitude;
     @ApiModelProperty("维度")
     private BigDecimal latitude;
     @ApiModelProperty("地址")
     private String address;
-    /**
-     * 密码
-     */
     @ApiModelProperty("密码")
     private String pwd;
-    /**
-     * 是否校验密码，0-否，1-是(默认)
-     */
     @ApiModelProperty("是否校验密码，0-否，1-是(默认)")
     private String pwdCheck;
-    /**
-     * 别名
-     */
     @ApiModelProperty("别名")
     private String alias;
-    /**
-     * 设备状态，0-停用，1-启用（默认）
-     */
     @ApiModelProperty("设备状态，0-停用，1-启用（默认）")
     private String status;
-    /**
-     * 心跳间隔：秒
-     */
     @ApiModelProperty("心跳间隔：默认60秒")
     private Integer heartbeatSec;
     @ApiModelProperty("创建时间")
