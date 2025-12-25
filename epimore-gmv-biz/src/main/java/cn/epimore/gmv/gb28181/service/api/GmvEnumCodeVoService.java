@@ -14,4 +14,5 @@ import java.util.List;
 public interface GmvEnumCodeVoService extends IService<GmvEnumCodeVo> {
 
     List<GmvTreeEnumCodeVo> getGmvTreeEnumCodeVo(String parentId);
+    List<GmvEnumCodeVo> getGmvEnumCodeVo(String parentId);
 }

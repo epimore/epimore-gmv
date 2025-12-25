@@ -2,6 +2,7 @@ package cn.epimore.gmv.gb28181.web;
 
 import cn.epimore.gmv.gb28181.service.api.GbDomainInfoApi;
 import cn.epimore.gmv.vo.GbDomainInfo;
+import cn.epimore.gmv.vo.GbNetworkDeviceTypeInfo;
 import cn.epimore.gmv.vo.GbServerInfo;
 import cn.epimore.gmv.vo.Result;
 import io.swagger.annotations.Api;
@@ -44,7 +45,7 @@ public class GmvDomainController {
 
     @GetMapping("/device")
     @ApiOperation(value = "device", notes = "查询设备域详情")
-    public ResponseEntity<GbDomainInfo> insert(@RequestParam("deviceId") String deviceId) {
+    public ResponseEntity<GbDomainInfo> queryGbDomainInfo(@RequestParam("deviceId") String deviceId) {
         logger.info("queryGbDomainInfo:{}", deviceId);
         try {
             GbDomainInfo info = domainInfoApi.queryGbDomainInfo(deviceId);
@@ -52,6 +53,19 @@ public class GmvDomainController {
         } catch (Exception e) {
             logger.error("查询设备域详情-异常", e);
             return Result.failure("查询设备域详情-失败");
+        }
+    }
+
+    @GetMapping("/types")
+    @ApiOperation(value = "types", notes = "查询设备域类型")
+    public ResponseEntity<GbDomainInfo> getGbNetworkDeviceTypeInfo() {
+        logger.info("getGbNetworkDeviceTypeInfo");
+        try {
+            GbNetworkDeviceTypeInfo typeInfo = domainInfoApi.getGbNetworkDeviceTypeInfo();
+            return Result.success(typeInfo);
+        } catch (Exception e) {
+            logger.error("查询设备域类型-异常", e);
+            return Result.failure("查询设备域类型-失败");
         }
     }
 

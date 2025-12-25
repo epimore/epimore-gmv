@@ -66,9 +66,16 @@ public class GbDomainInfoApiImpl implements GbDomainInfoApi {
             }
         }
 
-        BeanUtils.copyProperties(gmvOauth,info);
-        BeanUtils.copyProperties(serverVo,info);
+        BeanUtils.copyProperties(gmvOauth, info);
+        BeanUtils.copyProperties(serverVo, info);
         return info;
+    }
+
+    @Override
+    public GbNetworkDeviceTypeInfo getGbNetworkDeviceTypeInfo() {
+        List<GmvEnumCodeVo> networkTypes = enumCodeVoService.getGmvEnumCodeVo(EnumCodeConstants.GB28181_NETWORK_CODE);
+        List<GmvTreeEnumCodeVo> deviceTypes = enumCodeVoService.getGmvTreeEnumCodeVo(EnumCodeConstants.GB28181_TYPE_CODE);
+        return new GbNetworkDeviceTypeInfo(networkTypes, deviceTypes);
     }
 
 }

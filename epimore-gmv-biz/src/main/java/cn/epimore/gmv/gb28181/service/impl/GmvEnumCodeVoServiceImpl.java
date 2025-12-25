@@ -26,10 +26,20 @@ public class GmvEnumCodeVoServiceImpl extends ServiceImpl<GmvEnumCodeVoMapper, G
         LambdaQueryWrapper<GmvEnumCodeVo> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.select(GmvEnumCodeVo::getId, GmvEnumCodeVo::getParentId, GmvEnumCodeVo::getName,
                         GmvEnumCodeVo::getValueStart, GmvEnumCodeVo::getValueEnd, GmvEnumCodeVo::getSeq)
-                .eq(GmvEnumCodeVo::getParentId, parentId)
+                .like(GmvEnumCodeVo::getParentId, parentId+"%")
                 .eq(GmvEnumCodeVo::getStatus, 1);
         List<GmvEnumCodeVo> vos = super.baseMapper.selectList(queryWrapper);
         return buildToTree(vos, parentId);
+    }
+
+    @Override
+    public List<GmvEnumCodeVo> getGmvEnumCodeVo(String parentId) {
+        LambdaQueryWrapper<GmvEnumCodeVo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(GmvEnumCodeVo::getId, GmvEnumCodeVo::getParentId, GmvEnumCodeVo::getName,
+                        GmvEnumCodeVo::getValueStart, GmvEnumCodeVo::getValueEnd, GmvEnumCodeVo::getSeq)
+                .eq(GmvEnumCodeVo::getParentId, parentId)
+                .eq(GmvEnumCodeVo::getStatus, 1);
+        return super.baseMapper.selectList(queryWrapper);
     }
 
 
@@ -37,16 +47,17 @@ public class GmvEnumCodeVoServiceImpl extends ServiceImpl<GmvEnumCodeVoMapper, G
         if (CollectionUtils.isEmpty(vos)) {
             return Collections.emptyList();
         }
-        Map<String, GmvTreeEnumCodeVo> nodemap = vos.stream().collect(Collectors.toMap(GmvEnumCodeVo::getId, GmvTreeEnumCodeVo::new));
+        Map<String, GmvTreeEnumCodeVo> nodeMap = vos.stream().collect(Collectors.toMap(GmvEnumCodeVo::getId, GmvTreeEnumCodeVo::new));
         List<GmvTreeEnumCodeVo> roots = new ArrayList<>();
         for(GmvEnumCodeVo vo:vos){
+            GmvTreeEnumCodeVo current = nodeMap.get(vo.getId());
             String parentId = vo.getParentId();
             if (ObjectUtils.equals(parentId, rootParentId)) {
-                roots.add(new GmvTreeEnumCodeVo(vo));
+                roots.add(current);
             }else{
-                GmvTreeEnumCodeVo parentVo = nodemap.get(parentId);
+                GmvTreeEnumCodeVo parentVo = nodeMap.get(parentId);
                 if (ObjectUtils.isNotEmpty(parentVo)) {
-                    parentVo.getSubVos().add(new GmvTreeEnumCodeVo(vo));
+                    parentVo.getSubVos().add(current);
                 }
             }
         }
