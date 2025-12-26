@@ -10,7 +10,6 @@ import cn.epimore.gmv.vo.GmvDevice;
 import cn.epimore.gmv.vo.GmvOauth;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.system.vo.LoginUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +46,7 @@ public class GmvOauthApiImpl implements GmvOauthApi {
         LoginUser systemUser = CurrentUserHelper.getSystemUser();
         logger.info("当前系统用户信息:{}", systemUser);
         GmvDevice gmvDevice = new GmvDevice();
-        String deviceId = gbIdSeqService.buildGbId(record.getDomainId(), record.getTypeCode(), record.getNetworkCode());
+        String deviceId = gbIdSeqService.buildGbId(record.getDomainId(), record.getDeviceTypeCode(), record.getNetworkTypeCode());
         record.setDomain(record.getDomain());
         record.setDomainId(record.getDomainId());
         record.setStatus("1");

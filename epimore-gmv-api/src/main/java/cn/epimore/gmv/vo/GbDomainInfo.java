@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class GbDomainInfo implements Serializable {
-    @ApiModelProperty("sip服务器ID")
+    @ApiModelProperty("sip服务器域ID")
     private String domainId;
     @ApiModelProperty("sip服务器域")
     private String domain;
@@ -25,9 +25,13 @@ public class GbDomainInfo implements Serializable {
     private Integer sipPort;
 
     @ApiModelProperty("设备类型")
-    private String typeCodeName;
+    private String deviceTypeCode;
+//    @ApiModelProperty("设备类型")
+//    private String typeCodeName;
     @ApiModelProperty("网络类型")
-    private String networkCodeName;
+    private String networkTypeCode;
+//    @ApiModelProperty("网络类型")
+//    private String networkCodeName;
 
     @ApiModelProperty("别名")
     private String alias;
@@ -48,9 +52,6 @@ public class GbDomainInfo implements Serializable {
     @ApiModelProperty("地址")
     private String address;
 
-    @ApiModelProperty("备注")
-    private String remark;
-
     @ApiModelProperty("创建时间")
     private LocalDateTime createTime;
     @ApiModelProperty("创建人")
@@ -68,9 +69,4 @@ public class GbDomainInfo implements Serializable {
         return deviceId;
     }
 
-    public String getRemark() {
-        return "1. 传输方式支持UDP与TCP;" +
-                "2. GB/T28181协议版本：兼容2022与2016;" +
-                "3. 建议：注册有效期大于等于3600秒，注册间隔等于60秒;心跳周期等于60秒，最大心跳超时次数等于3";
-    }
 }

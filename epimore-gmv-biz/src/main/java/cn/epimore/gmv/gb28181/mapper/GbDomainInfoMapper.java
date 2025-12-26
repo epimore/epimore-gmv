@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface GbDomainInfoMapper {
 
-    List<GbServerInfo> getGbServerInfoList();
+    List<GbServerInfo> getGbServerInfoList(GbSessionServerQo info);
     SessionSourceVo getSessionSourceVo(String deviceId);
 }

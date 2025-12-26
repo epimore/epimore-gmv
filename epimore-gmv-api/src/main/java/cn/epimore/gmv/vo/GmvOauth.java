@@ -24,9 +24,9 @@ public class GmvOauth extends BasePage implements Serializable {
     @ApiModelProperty("设备域")
     private String domain;
     @ApiModelProperty("设备类型")
-    private String typeCode;
+    private String deviceTypeCode;
     @ApiModelProperty("网络类型")
-    private String networkCode;
+    private String networkTypeCode;
     @ApiModelProperty("经度")
     private BigDecimal longitude;
     @ApiModelProperty("维度")

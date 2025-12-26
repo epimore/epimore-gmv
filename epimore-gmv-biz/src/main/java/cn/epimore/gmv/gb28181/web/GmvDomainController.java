@@ -1,10 +1,9 @@
 package cn.epimore.gmv.gb28181.web;
 
 import cn.epimore.gmv.gb28181.service.api.GbDomainInfoApi;
-import cn.epimore.gmv.vo.GbDomainInfo;
-import cn.epimore.gmv.vo.GbNetworkDeviceTypeInfo;
-import cn.epimore.gmv.vo.GbServerInfo;
-import cn.epimore.gmv.vo.Result;
+import cn.epimore.gmv.vo.*;
+import com.alibaba.fastjson2.JSON;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/domain")
@@ -31,10 +30,10 @@ public class GmvDomainController {
 
     @PostMapping("/servers")
     @ApiOperation(value = "servers", notes = "查询服务器域列表")
-    public ResponseEntity<List<GbServerInfo>> queryGbServerInfos() {
-        logger.info("servers");
+    public ResponseEntity<PageInfo<GbServerInfo>> queryGbServerInfos(@RequestBody @NotNull GbSessionServerQo info) {
+        logger.info("queryGbServerInfos:{}", JSON.toJSONString(info));
         try {
-            List<GbServerInfo> infos = domainInfoApi.queryGbServerInfos();
+            PageInfo<GbServerInfo> infos = domainInfoApi.queryGbServerInfos(info);
             return Result.success(infos);
         } catch (Exception e) {
             logger.error("查询服务器域列表-异常", e);
@@ -43,12 +42,12 @@ public class GmvDomainController {
 
     }
 
-    @GetMapping("/device")
+    @PostMapping("/device")
     @ApiOperation(value = "device", notes = "查询设备域详情")
-    public ResponseEntity<GbDomainInfo> queryGbDomainInfo(@RequestParam("deviceId") String deviceId) {
-        logger.info("queryGbDomainInfo:{}", deviceId);
+    public ResponseEntity<GbDomainInfo> queryGbDomainInfo(@RequestBody @NotNull IdMap map) {
+        logger.info("queryGbDomainInfo:{}", JSON.toJSONString(map));
         try {
-            GbDomainInfo info = domainInfoApi.queryGbDomainInfo(deviceId);
+            GbDomainInfo info = domainInfoApi.queryGbDomainDevice(map.getDeviceId());
             return Result.success(info);
         } catch (Exception e) {
             logger.error("查询设备域详情-异常", e);
@@ -56,9 +55,9 @@ public class GmvDomainController {
         }
     }
 
-    @GetMapping("/types")
+    @PostMapping("/types")
     @ApiOperation(value = "types", notes = "查询设备域类型")
-    public ResponseEntity<GbDomainInfo> getGbNetworkDeviceTypeInfo() {
+    public ResponseEntity<GbNetworkDeviceTypeInfo> getGbNetworkDeviceTypeInfo() {
         logger.info("getGbNetworkDeviceTypeInfo");
         try {
             GbNetworkDeviceTypeInfo typeInfo = domainInfoApi.getGbNetworkDeviceTypeInfo();

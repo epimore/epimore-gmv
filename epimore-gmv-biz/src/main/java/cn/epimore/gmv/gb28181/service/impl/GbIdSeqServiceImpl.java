@@ -1,18 +1,20 @@
 package cn.epimore.gmv.gb28181.service.impl;
 
+import cn.epimore.gmv.gb28181.mapper.GbIdSeqMapper;
 import cn.epimore.gmv.gb28181.service.api.GbIdSeqService;
 import cn.epimore.gmv.gb28181.service.api.GbServerService;
-import cn.epimore.gmv.vo.GbServerVo;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import cn.epimore.gmv.gb28181.service.api.GmvEnumCodeVoService;
 import cn.epimore.gmv.vo.GbIdSeq;
-import cn.epimore.gmv.gb28181.mapper.GbIdSeqMapper;
+import cn.epimore.gmv.vo.GbServerVo;
+import cn.epimore.gmv.vo.GmvEnumCodeVo;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author MRK
@@ -24,6 +26,8 @@ public class GbIdSeqServiceImpl extends ServiceImpl<GbIdSeqMapper, GbIdSeq>
         implements GbIdSeqService {
     @Autowired
     private GbServerService gbServerService;
+    @Autowired
+    private GmvEnumCodeVoService enumCodeVoService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -32,10 +36,30 @@ public class GbIdSeqServiceImpl extends ServiceImpl<GbIdSeqMapper, GbIdSeq>
         if (ObjectUtils.isEmpty(serverVo)) {
             return null;
         }
+        List<GmvEnumCodeVo> enumCodeVos = enumCodeVoService.lambdaQuery().eq(GmvEnumCodeVo::getId, typeCode).or()
+                .eq(GmvEnumCodeVo::getId, networkCode).list();
+        if (ObjectUtils.isEmpty(enumCodeVos) || enumCodeVos.size() != 2) {
+            throw new RuntimeException("设备类型或网络类型不存在");
+        }
+        String deviceTypeValue = "";
+        String networkTypeValue = "";
+        for (GmvEnumCodeVo enumCodeVo : enumCodeVos) {
+            if (enumCodeVo.getId().equals(typeCode)) {
+                deviceTypeValue = enumCodeVo.getValueStart();
+            }
+            if (enumCodeVo.getId().equals(networkCode)) {
+                networkTypeValue = enumCodeVo.getValueStart();
+            }
+        }
+
+        if (ObjectUtils.isEmpty(deviceTypeValue) || ObjectUtils.isEmpty(networkTypeValue)) {
+            throw new RuntimeException("设备类型或网络类型不存在");
+        }
+
         GbIdSeq result = this.lambdaQuery()
                 .eq(GbIdSeq::getDomainId, domainId)
-                .eq(GbIdSeq::getTypeCode, typeCode)
-                .eq(GbIdSeq::getNetworkCode, networkCode)
+                .eq(GbIdSeq::getTypeCode, deviceTypeValue)
+                .eq(GbIdSeq::getNetworkCode, networkTypeValue)
                 .one();
 
         if (ObjectUtils.isEmpty(result)) {
@@ -43,8 +67,8 @@ public class GbIdSeqServiceImpl extends ServiceImpl<GbIdSeqMapper, GbIdSeq>
             idSeq.setDomainId(domainId);
             idSeq.setCenterCode(domainId.substring(0, 8));
             idSeq.setIndustryCode(domainId.substring(8, 10));
-            idSeq.setTypeCode(typeCode);
-            idSeq.setNetworkCode(networkCode);
+            idSeq.setTypeCode(deviceTypeValue);
+            idSeq.setNetworkCode(networkTypeValue);
             idSeq.setSeq(1);
             idSeq.setStatus(1);
             idSeq.setCreateDate(LocalDateTime.now());

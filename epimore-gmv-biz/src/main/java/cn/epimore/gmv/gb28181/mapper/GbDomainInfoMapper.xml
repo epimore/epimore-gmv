@@ -10,7 +10,6 @@
                a.domain,
                a.sip_ip,
                a.sip_port,
-               a.http_source,
                a.`status`,
                CASE
                    WHEN a.STATUS = 1
@@ -26,6 +25,14 @@
                  LEFT JOIN C_AREA_CODE b ON b.`code` = CONCAT(LEFT(a.domain_id, 8), '0000')
                  LEFT JOIN GMV_ENUM_CODE c ON c.parent_id = '1001'
             AND c.value_start = SUBSTRING(a.domain_id, 9, 2)
+        <where>
+            <if test="areaName != null and areaName != ''">
+                and b.`name` LIKE CONCAT('%',#{areaName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="industryName != null and industryName != ''">
+                and c.`name` LIKE CONCAT('%',#{industryName,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
         order by a.domain_id desc
     </select>
     <select id="getSessionSourceVo" resultType="cn.epimore.gmv.vo.SessionSourceVo">
