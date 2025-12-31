@@ -51,6 +51,8 @@ public class GbDomainInfo implements Serializable {
     private BigDecimal latitude;
     @ApiModelProperty("地址")
     private String address;
+    @ApiModelProperty("心跳间隔：默认60秒")
+    private Integer heartbeatSec;
 
     @ApiModelProperty("创建时间")
     private LocalDateTime createTime;

@@ -52,6 +52,9 @@ public class GmvOauthApiImpl implements GmvOauthApi {
         record.setStatus("1");
         gmvDevice.setDeviceId(deviceId);
         record.setDeviceId(deviceId);
+        if (record.getHeartbeatSec() == null || record.getHeartbeatSec() < 5){
+            record.setHeartbeatSec(60);
+        }
         gmvDeviceMapper.insert(gmvDevice);
         return gmvOauthMapper.insert(record);
     }
